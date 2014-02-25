@@ -20,7 +20,7 @@
 #define RELAY_ACCEL 31
 #define RELAY_DIRECTION 30
 
-#define SPEED 1400
+#define SPEED 1700
 
 volatile int brake_status = 0; // 0=release, 1=applying, 2=not moving
 int brake_on_state;

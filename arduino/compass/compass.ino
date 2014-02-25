@@ -12,15 +12,17 @@ see www.solutions-cubed.com for additional information.
 
 /*
  * compass wiring
- * orange - 5v power
- * brown - ground
- * purple - SDA, 20
+ * red - 5v power
+ * black - ground
+ * white - SDA, 20
  * green - SCL, 21
  * front faces away from the wires
  */
 
 #include <Wire.h>
 #include <math.h>
+#include <stdlib.h>
+#include <avr/dtostrf.h>
  
 float Heading;
 float Pitch;
@@ -47,7 +49,8 @@ String inputString = "";
 boolean stringComplete = false;
 
 //start the time,
-unsigned long time = 0;
+unsigned long thetime = 0;
+
 
 //keep track if we got a response or not
 int noResponse = 0;
@@ -198,13 +201,14 @@ void get_TiltHeading(void)
 //   Mag_maxy = 269;
 //   Mag_maxz = 465;
      
-     //these seem to work ok for the calibration
-     Mag_minx = -589;
-     Mag_miny = -632;
-     Mag_minz = -799;
-     Mag_maxx = 596;
-     Mag_maxy = 526;
-     Mag_maxz = 533;
+     //recalibrated and using these values now
+     Mag_minx = -637;
+     Mag_miny = -599;
+     Mag_minz = -432;
+     Mag_maxx = 567;
+     Mag_maxy = 442;
+     Mag_maxz = 574;
+     
   
   // use calibration values to shift and scale magnetometer measurements
   Magx = (Magx-Mag_minx)/(Mag_maxx-Mag_minx)*2-1;  
@@ -251,7 +255,7 @@ String fixFloat(float d)
   
 void doSomething(String s)
 {
-     time = millis();
+     thetime = millis();
      String log = "receive: " + s + " - ";
      log = "";
      if(s == "A" || s == "a")
@@ -303,6 +307,9 @@ void setup()
      Serial.begin(115200);
      Serial1.begin(115200);
 
+     //something for the due?
+     //init(LSM303::device_LSM303DLM, LSM303::sa0_high);
+     
      //log ready message
      Serial.println("arduino ready");
      Serial1.println("arduino ready");
@@ -327,10 +334,10 @@ void loop()
           inputString = "";
           stringComplete = false;
      }
-     if ( (millis() - time) > 6000)
+     if ( (millis() - thetime) > 6000)
      {
           //Serial.println("stop everything!");
-          delay(1000);
+          //delay(1000);
      }
      
 }

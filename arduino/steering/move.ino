@@ -17,6 +17,11 @@
 //pin 32 kicks the relay that turns on power for everything it seems
 #define RELAY_POWER     32
 
+#define RELAY_ACCEL 31
+#define RELAY_DIRECTION 30
+
+#define SPEED 1400
+
 volatile int brake_status = 0; // 0=release, 1=applying, 2=not moving
 int brake_on_state;
 int brake_off_state;
@@ -39,6 +44,24 @@ void logger(String t)
 }
 
 
+unsigned int formatDACommand(unsigned int value)
+{
+  value = value<<1;
+  value = value & 8190;          //B0001111111111110
+  return value;
+}
+
+void setAccel(unsigned int value)
+{
+  //currentForwardSpeed += value;
+  
+  value = formatDACommand(value);
+  digitalWrite(SLAVE_SELECT,LOW);
+  SPI.transfer(value>>8);
+  SPI.transfer(value);
+  digitalWrite(SLAVE_SELECT,HIGH); 
+}
+
 void brakePulse()
 {
 /*     
@@ -55,42 +78,11 @@ receive: eb
 1
 0     
 */ 
-     Serial.println(brake_on_state);//switch underneath
-     Serial.println(brake_off_state);//switch on the brake pedal
+ //Serial.println(brake_on_state);//switch underneath
+     //Serial.println(brake_off_state);//switch on the brake pedal
      
      brake_on_state = digitalRead(BRAKE_ON_PIN);
      brake_off_state = digitalRead(BRAKE_OFF_PIN);
-     if (brake_status == 1)
-     {
-          Serial.println("begin braking");
-     }
-     else if (brake_status == 0);
-     {
-          Serial.println("end braking");
-     }
-//      if (brake_on_state == 0)
-//      {
-//           brake.writeMicroseconds(2000);
-//      }
-//      else
-//      {
-//           brake.writeMicroseconds(1500);
-//      }
-     
-     
-//      if (brake_status == 1 && brake_on_state == 0)
-//      {
-//           brake.writeMicroseconds(2000);     //apply brakes
-//      }
-//      else if (brake_status == 0 && brake_off_state == 0)
-//      {
-//           brake.writeMicroseconds(1000);     //release brakes
-//      }
-//      else
-//      {
-//           brake.writeMicroseconds(1500);     //stop brake motor
-//      }
-     
      
 //      if (brake_off_state == 0 && brake_status == 1)
 //      {
@@ -108,6 +100,8 @@ receive: eb
 }
 
 /*
+BVF - begin vehicle forward
+EVF - end vehicle forward
 BB  - apply brake
 EB  - end brake
 
@@ -117,10 +111,24 @@ void doSomething(String s)
 {
      time = millis();
      String log = "receive: " + s;
-     if (s == "BB" || s == "bb")
+     if (s == "BVF" || s == "bvf")
      {
           logger(log);
-          //brake.writeMicroseconds(1000);
+          //this code works
+          //unsigned int val = 1400;
+          //setAccel(abs(val));
+          
+          setAccel(abs(SPEED));
+     }
+     else if (s == "EVF" || s == "evf")
+     {
+          logger(log);
+          setAccel(0);
+     }
+     else if (s == "BB" || s == "bb")
+     {
+          logger(log);
+          brake.writeMicroseconds(1000);
           brake_status = 1; // 1 = the brake is being applied
           
           //2000 applies the brakes
@@ -148,10 +156,27 @@ void setup()
      Serial.begin(BAUD);
      Serial1.begin(BAUD);
 
+     //Inits the Accerator stuff to change speed or resistance on the 
+     // maxim chip
+     pinMode(SLAVE_SELECT, OUTPUT);
+     SPI.setDataMode(SPI_MODE0);
+     SPI.setClockDivider(SPI_CLOCK_DIV2);
+     SPI.setBitOrder(MSBFIRST);
+     SPI.begin();     
+
      pinMode(BRAKE_ON_PIN, INPUT_PULLUP);
      pinMode(BRAKE_OFF_PIN, INPUT_PULLUP);  
      brake.attach(BRAKE_PIN);
 
+     //not sure what this is
+     pinMode(RELAY_ACCEL,OUTPUT);
+     digitalWrite(RELAY_ACCEL,LOW);
+     
+     
+     //not sure what this is either
+     //pinMode(RELAY_DIRECTION,OUTPUT);
+     //digitalWrite(RELAY_DIRECTION,HIGH);
+     
      //get ready to turn on the power
      pinMode(RELAY_POWER,OUTPUT);     
      //turn on the power now
@@ -190,4 +215,3 @@ void serialEvent()
                inputString += inChar;     
      }
 }
- 
