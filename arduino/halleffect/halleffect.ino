@@ -1,3 +1,14 @@
+/*
+ * hall effect sensor on the front wheel
+ * black - orange - ground
+ * blue - brown - signal, pin 2
+ * red - yellow - +5vdc
+ * 
+ * diameter of the wheel - 16.5 inches
+ * circumference - 51.83627 inches
+ * 7 magnets, evenly spaced, 7.40518 inches apart
+ */
+
 #define BAUD 115200
  
  /*
@@ -15,6 +26,7 @@
 int hallState = 0;  //reading sensor status
 
 int ticks = 0;
+int revolutions = 0;
 
 void setup()
 {
@@ -33,24 +45,19 @@ void setup()
 
 void loop()
 {
-//      hallState = digitalRead(hallPin);
-//      if(hallState == LOW)
-//      {
-//           //turn the light on
-//           digitalWrite(ledPin,HIGH);
-//      }
-//      else
-//      {
-//           //turn the light off
-//           digitalWrite(ledPin,LOW);
-//      }
+     
 }
-
 
 void tickhandler()
 {
      ticks++;
+     if (ticks >7)
+     {
+          ticks = 0;
+          revolutions++;
+     }
      Serial.println(ticks);
+     Serial.pritnln(revolutions);
      
      digitalWrite(ledPin, !digitalRead(ledPin) );
 }

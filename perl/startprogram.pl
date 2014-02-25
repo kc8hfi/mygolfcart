@@ -112,12 +112,13 @@ my $stream = IO::Async::Stream->new(
                     $accelerometer->x_value($fields[1]);
                     $accelerometer->y_value($fields[2]);
                     $accelerometer->z_value($fields[3]);
+                    
                     $compass->x_value($fields[4]);
                     $compass->y_value($fields[5]);
                     $compass->z_value($fields[6]);
                     $compass->heading($fields[7]);
 
-                    
+                    #parse out the hall effect sensor data here....
                }
 #                else
 #                {
@@ -160,7 +161,10 @@ my $status_timer = IO::Async::Timer::Periodic->new(
                $stream->write("status\n");
                print $logfile Helper::log_time," ",Dumper($accelerometer);
                print $logfile Helper::log_time," ",Dumper($compass);
+               
                #print $logfile Helper::log_time," ",Dumper($gps_coords);
+               
+               #this might be where we should do calculations with gps, compass, distance, etc
           }
      },
 );
