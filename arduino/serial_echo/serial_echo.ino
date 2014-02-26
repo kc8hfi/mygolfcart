@@ -2,6 +2,54 @@
  * read from Serial, and write back to Serial and Serial1
  */
 
+char inputString[6];
+
+int where_in_string = 0;
+boolean stringComplete = false;
+
+void setup()
+{
+     Serial.begin(115200);     // opens serial port, sets data rate
+     Serial1.begin(115200);
+     inputString[0] = '\0';
+     
+     
+     Serial.println("ready");
+}
+
+void loop() 
+{
+     if (stringComplete)
+     {
+          Serial.println(inputString);
+          Serial1.println(inputString);
+          inputString[0] = '\0';
+          where_in_string = 0;
+          stringComplete = false;
+     }
+}
+
+void serialEvent()
+{
+     while(Serial.available())
+     {
+          char inChar = (char)Serial.read();
+          if (where_in_string < 5 && inChar != '\n')
+          {
+               inputString[where_in_string] = inChar;
+          }
+          else
+          {
+               stringComplete = true;
+               inputString[where_in_string] = '\0';
+          }
+          where_in_string++;
+     }
+}
+
+
+ 
+/*
 String inputString = "";
 boolean stringComplete = false;
 
@@ -30,11 +78,21 @@ void serialEvent()
           if(inChar == '\n')
                stringComplete = true;
           else
+          {
                inputString += inChar;     
+               
+          }
      }
-}
-
-
+}*/ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
 // // --------------------------------------
 // // i2c_scanner
