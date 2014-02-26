@@ -1,8 +1,8 @@
 /*
  * hall effect sensor on the front wheel
- * black - orange - ground
- * blue - brown - signal, pin 2
- * red - yellow - +5vdc
+ * black - 14 orange - ground
+ * blue - 13 brown - signal, pin 2
+ * red - 15 yellow - +5vdc
  * 
  * diameter of the wheel - 16.5 inches
  * circumference - 51.83627 inches
