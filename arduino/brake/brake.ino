@@ -18,6 +18,7 @@
 #define RELAY_POWER     32
 
 volatile int brake_status = 0; // 0=release, 1=applying, 2=not moving
+int is_brake;  //0=false, 1=true
 int brake_on_state;
 int brake_off_state;
 volatile boolean brake_set = false;
@@ -55,18 +56,32 @@ receive: eb
 1
 0     
 */ 
-     Serial.println(brake_on_state);//switch underneath
-     Serial.println(brake_off_state);//switch on the brake pedal
+//      Serial.println(brake_on_state);//switch underneath
+//      Serial.println(brake_off_state);//switch on the brake pedal
      
      brake_on_state = digitalRead(BRAKE_ON_PIN);
      brake_off_state = digitalRead(BRAKE_OFF_PIN);
-     if (brake_status == 1)
+//      if (brake_status == 1)
+//      {
+//           Serial.println("begin braking");
+//      }
+//      else if (brake_status == 0);
+//      {
+//           Serial.println("end braking");
+//      }
+     if(brake_on_state == 0 && brake_status == 1)  //stop moving the motor
      {
-          Serial.println("begin braking");
+          brake.writeMicroseconds(1500);
+          brake_status = 2;
+          is_brake = 1;
+          logger("stopped the motor!");
      }
-     else if (brake_status == 0);
+     if(brake_off_state == 0  && brake_status == 0)
      {
-          Serial.println("end braking");
+          brake.writeMicroseconds(1500);
+          brake_status = 2;
+          is_brake = 0;
+          logger("stopped motor other way!");
      }
 //      if (brake_on_state == 0)
 //      {
@@ -117,10 +132,21 @@ void doSomething(String s)
 {
      time = millis();
      String log = "receive: " + s;
+
+     
+     brake_on_state = digitalRead(BRAKE_ON_PIN);
+     brake_off_state = digitalRead(BRAKE_OFF_PIN);
+     
+     Serial.print("on:");
+     Serial.println(brake_on_state);//switch underneath
+     Serial.print("off:");
+     Serial.println(brake_off_state);//switch on the brake pedal
+     Serial.print("status:");
+     Serial.println(is_brake);
      if (s == "BB" || s == "bb")
      {
           logger(log);
-          //brake.writeMicroseconds(1000);
+          brake.writeMicroseconds(2000);
           brake_status = 1; // 1 = the brake is being applied
           
           //2000 applies the brakes
@@ -130,15 +156,29 @@ void doSomething(String s)
      else if (s == "EB" || s == "eb")
      {
           logger(log);
-          brake.writeMicroseconds(1500);
+          brake.writeMicroseconds(1000);
           brake_status = 0;
      }
-     else
+//      else if (s == "RB" || s == "rb")
+//      {
+//           logger(log);
+//           brake.writeMicroseconds(1000);
+//           brake_status = 0;
+//      }
+     else if (s == "SM" || s == "sm")
      {
-          Serial.println(brake_on_state);//switch underneath
-          Serial.println(brake_off_state);//switch on the brake pedal
-          Serial.println(brake_status);
+          logger(log);
+          brake.writeMicroseconds(1000);
+          logger("stop motor");
+          //brake_status = 0;
      }
+
+//      else
+//      {
+//           Serial.println(brake_on_state);//switch underneath
+//           Serial.println(brake_off_state);//switch on the brake pedal
+//           Serial.println(brake_status);
+//      }
 
 }//end doSomething
 
