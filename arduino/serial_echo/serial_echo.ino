@@ -34,7 +34,7 @@ void serialEvent()
      while(Serial.available())
      {
           char inChar = (char)Serial.read();
-          if (where_in_string < 5 && inChar != '\n')
+          if (where_in_string < 6 && inChar != '\n')
           {
                inputString[where_in_string] = inChar;
           }
