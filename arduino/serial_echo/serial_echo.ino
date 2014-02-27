@@ -2,7 +2,7 @@
  * read from Serial, and write back to Serial and Serial1
  */
 
-char inputString[6];
+char inputString[7];
 
 int where_in_string = 0;
 boolean stringComplete = false;
@@ -21,6 +21,7 @@ void loop()
 {
      if (stringComplete)
      {
+          Serial.print("incoming:");
           Serial.println(inputString);
           Serial1.println(inputString);
           inputString[0] = '\0';
@@ -42,8 +43,10 @@ void serialEvent()
           {
                stringComplete = true;
                inputString[where_in_string] = '\0';
+               Serial.println(where_in_string);
           }
           where_in_string++;
+
      }
 }
 
