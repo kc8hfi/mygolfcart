@@ -11,8 +11,8 @@ use Data::Dumper;
 
 use Gps;
 use GpsRow;
-use Accelerometer;
-use Compass;
+#use Accelerometer;
+#use Compass;
 use Helper;
 
 
@@ -25,6 +25,13 @@ use Helper;
 #add user to these groups
 #1.  lock
 #2.  dialout
+
+#before this scripts gets run,  the terminal port needs to be configured first
+#run this command:
+#stty -F /dev/ttyACM0 -opost -onlcr -isig -icanon -iexten -echo -echoe -echok -echoctl -echoke
+#and then start this script.  
+
+
 
 #file to write the gps coordinates
 open my $thefile, ">>logs/raw_coordinates.txt" or die "cannot open logs/raw_coordinates.txt file! $!\n";
@@ -39,21 +46,14 @@ $logfile->autoflush(1);
 #holds the gps coordinates
 my $gps_coords;
 
-#holds the accelerometer data
-my $accelerometer = Accelerometer->new();
+#holds the accelerometer data, not needed now that we got the heading
+#my $accelerometer = Accelerometer->new();
 
-#holds the compass data
-my $compass = Compass->new();
+#holds the compass data, not needed now that we got the heading
+#my $compass = Compass->new();
 
-# sub set_accelerometer
-# {
-#      my $line = shift;
-#      print "incoming-$line";
-#      print "done";
-#      #remove \r\n's
-#      $line =~ tr/[\r\n]//d;
-#      
-# }
+#holds just he heading
+my $heading = "";
 
 my $loop = IO::Async::Loop->new;
 
@@ -76,49 +76,19 @@ foreach my $d(@whichdevice)
 my $stream = IO::Async::Stream->new( 
      handle => $device,
      
-      on_read => sub 
-      {
-          my ( $self, $buffref, $eof ) = @_;
-
-          while( $$buffref =~ s/^(.*\n)// ) 
-          {
-               print "Received from serial port: $1";
-               my $line = $1;
-               #print $line;
-               if ($line =~ /Accelerometer/)
+     on_read => sub 
+     {
+         my ( $self, $buffref, $eof ) = @_;
+         while( $$buffref =~ s/^(.*\n)// ) 
+         {
+              print "Received from serial port: $1";
+              my $line = $1;
+              #print $line;
+               if($line =~ /Status/)
                {
                     $line =~ tr/[\r\n]//d;
                     my @fields = split(',',$line);
-                    $accelerometer->x_value($fields[1]);
-                    $accelerometer->y_value($fields[2]);
-                    $accelerometer->z_value($fields[3]);
-                    #print Dumper($accelerometer);
-               }
-               elsif($line =~ /Compass/)
-               {
-                    $line =~ tr/[\r\n]//d;
-                    my @fields = split(',',$line);
-                    $compass->x_value($fields[1]);
-                    $compass->y_value($fields[2]);
-                    $compass->z_value($fields[3]);
-                    $compass->heading($fields[4]);
-                    #print Dumper($compass);
-               }
-               elsif($line =~ /Status/)
-               {
-                    #split up the status line, it contains accelerometer x,y,z and compass x,y,z,heading
-                    $line =~ tr/[\r\n]//d;
-                    my @fields = split(',',$line);
-                    $accelerometer->x_value($fields[1]);
-                    $accelerometer->y_value($fields[2]);
-                    $accelerometer->z_value($fields[3]);
-                    
-                    $compass->x_value($fields[4]);
-                    $compass->y_value($fields[5]);
-                    $compass->z_value($fields[6]);
-                    $compass->heading($fields[7]);
-
-                    #parse out the hall effect sensor data here....
+                    $heading = $fields[1];
                }
 #                else
 #                {
@@ -127,7 +97,7 @@ my $stream = IO::Async::Stream->new(
           }
           if( $eof ) 
           {
-               print "EOF; last partial line is $$buffref\n";
+               print "EOF; last partial line from serial port is $$buffref\n";
           }
        return 0;
      }
@@ -159,8 +129,10 @@ my $status_timer = IO::Async::Timer::Periodic->new(
           if (defined($stream->write_handle))
           {         
                $stream->write("status\n");
-               print $logfile Helper::log_time," ",Dumper($accelerometer);
-               print $logfile Helper::log_time," ",Dumper($compass);
+#                print $logfile Helper::log_time," ",Dumper($accelerometer);
+#                print $logfile Helper::log_time," ",Dumper($compass);
+               
+               print $logfile Helper::log_time," ",Dumper($heading);
                
                #print $logfile Helper::log_time," ",Dumper($gps_coords);
                
@@ -218,13 +190,17 @@ my $gps_stream = IO::Async::Stream->new(
           }
           if( $eof ) 
           {
-               print "EOF; last partial line is $$buffref\n";
+               print "EOF; last partial line from gps is $$buffref\n";
           }
           return 0;
      }
 );
 
 $loop->add($gps_stream);
+
+# keyboard commands
+# c,C - print gps coords
+# h,H - print heading
 
 
 #read keyboard input here, and then send it to the arduino board
@@ -253,11 +229,14 @@ my $userstream = IO::Async::Stream->new(
                          #print Dumper($accelerometer);
                          #print Dumper($compass);
                     }
-                    elsif($cmd eq 's' || $cmd eq 'S')
+                    elsif($cmd eq 'h' || $cmd eq 'H')
                     {
-                         print $logfile Helper::log_time," ",Dumper($gps_coords);
-                         print $logfile Helper::log_time," ",Dumper($accelerometer);
-                         print $logfile Helper::log_time," ",Dumper($compass);
+                         print "heading: ";
+                         print Dumper($heading);
+                         #print $logfile Helper::log_time," ",Dumper($gps_coords);
+#                          print $logfile Helper::log_time," ",Dumper($accelerometer);
+#                          print $logfile Helper::log_time," ",Dumper($compass);
+                         #print $logfile Helper::log_time," ",Dumper($heading);
                     }
                     else
                     {
@@ -269,7 +248,7 @@ my $userstream = IO::Async::Stream->new(
 
           if( $eof ) 
           {
-               print "EOF; last partial line is $$buffref\n";
+               print "EOF; last partial line from keyboard is $$buffref\n";
           }
 
           return 0;

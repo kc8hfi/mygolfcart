@@ -248,10 +248,8 @@ String fixFloat(float d)
 }
   
 /*
- * Acc,acc - accelerometer stuff
- * Com,com - compass stuff
  * ping - keepalive 
- * status - accelerometer x,y,z and compass x,y,z,heading 
+ * heading - heading
  */
   
 void doSomething(String s)
@@ -259,35 +257,15 @@ void doSomething(String s)
      thetime = millis();
      String log = "receive: " + s + " - ";
      log = "";
-     if(s == "Acc" || s == "acc")
+     if (s == "status")
      {
-          log += "Accelerometer,";
-          log += fixFloat(Accx) + ",";
-          log += fixFloat(Accy) + ",";
-          log += fixFloat(Accz);
+          log = log + "Status,";
+          Heading = round(Heading);
+          char convert[20];
+          //dtostrf(floatvar, minStringWidthIncludingDecimalPoint, numVarsAfterDecimal, charBuffer)
+          dtostrf(Heading,1,0,convert);
+          log += convert;
           logger(log);
-     }
-     else if(s == "Com" || s == "com")
-     {
-          log += "Compass,";
-          log += fixFloat(Magx) + ",";
-          log += fixFloat(Magy) + ",";
-          log += fixFloat(Magz) + ",";
-          log += fixFloat(Heading);
-          logger(log);
-     }
-     else if (s == "status")
-     {
-          log += "Status,";          
-          log += fixFloat(Accx) + ",";
-          log += fixFloat(Accy) + ",";
-          log += fixFloat(Accz) + ",";
-          log += fixFloat(Magx) + ",";
-          log += fixFloat(Magy) + ",";
-          log += fixFloat(Magz) + ",";
-          log += fixFloat(Heading);
-          logger(log);
-
      }
      else if (s=="ping")
      {
@@ -308,9 +286,6 @@ void setup()
      Serial.begin(115200);
      Serial1.begin(115200);
 
-     //something for the due?
-     //init(LSM303::device_LSM303DLM, LSM303::sa0_high);
-     
      //log ready message
      Serial.println("arduino ready");
      Serial1.println("arduino ready");

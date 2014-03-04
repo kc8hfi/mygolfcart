@@ -50,6 +50,7 @@ int hallState = 0;
  * keep track of the number of times the magnet passed the hall effect sensor
  */
 int ticks = 0;
+int revolutions = 0;
 
 /*
  * bunch of variables for the compass
@@ -281,7 +282,13 @@ String fixFloat(float d)
 void hallEffect()
 {
      ticks++;
+     if (ticks > 7)
+     {
+          ticks = 0;
+          revolutions++;
+     }
      Serial.println(ticks);
+     Serial.println(revolutions);
      
      //activate the led, (turn it on if its off, turn it off if its on?)
      digitalWrite(ledPin, !digitalRead(ledPin) );
@@ -311,46 +318,23 @@ void setup()
 
 /*
  * this function does it all.
- * Acc,acc - accelerometer stuff
- * Com,com - compass stuff
  * ping - keepalive 
  * status - accelerometer x,y,z and compass x,y,z,heading 
  */
-  
 void doSomething(String s)
 {
      thetime = millis();
      String log = "receive: " + s + " - ";
      log = "";
-     if(s == "Acc" || s == "acc")
+     if (s == "status")
      {
-          log += "Accelerometer,";
-          log += fixFloat(Accx) + ",";
-          log += fixFloat(Accy) + ",";
-          log += fixFloat(Accz);
+          log = log + "Status,";
+          Heading = round(Heading);
+          char convert[20];
+          //dtostrf(floatvar, minStringWidthIncludingDecimalPoint, numVarsAfterDecimal, charBuffer)
+          dtostrf(Heading,1,0,convert);
+          log += convert;
           logger(log);
-     }
-     else if(s == "Com" || s == "com")
-     {
-          log += "Compass,";
-          log += fixFloat(Magx) + ",";
-          log += fixFloat(Magy) + ",";
-          log += fixFloat(Magz) + ",";
-          log += fixFloat(Heading);
-          logger(log);
-     }
-     else if (s == "status")
-     {
-          log += "Status,";          
-          log += fixFloat(Accx) + ",";
-          log += fixFloat(Accy) + ",";
-          log += fixFloat(Accz) + ",";
-          log += fixFloat(Magx) + ",";
-          log += fixFloat(Magy) + ",";
-          log += fixFloat(Magz) + ",";
-          log += fixFloat(Heading);
-          logger(log);
-
      }
      else if (s=="ping")
      {
@@ -364,8 +348,6 @@ void doSomething(String s)
           logger(log);
      }
 }//end doSomething
-
-
 
 void loop()
 {
