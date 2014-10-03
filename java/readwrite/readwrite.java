@@ -12,6 +12,18 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 /*
+ * on a fedora box, and possibly any other linux distro,  you're going to need to make some 
+ * symlinks to point to the actual serial port.
+ * The mega2560 shows up as a /dev/ttyACM0 device, but the RXTX library doesn't pick up
+ * ttyACM devices - it only deals with ttyS devices.
+ * So, make a symlink to /dev/ttyACM0, or whatever number the computer assigned it.  
+ * 
+ * ln -s /dev/ttyACM0 /dev/ttyS10
+ * 
+ * of course, replace the ttyACM0 with whatever your arduino is,
+ * and replace ttyS10 with whatever number is not already in /dev
+ * 
+ * 
  * to compile:
  * javac -cp /usr/share/java/RXTXcomm.jar:. *.java
  * 
