@@ -1,0 +1,14 @@
+
+
+
+
+
+.build/mega2560/src/serial_read/serial_read.cpp : src/serial_read/serial_read.ino
+	@mkdir -p .build/mega2560/src/serial_read
+	@echo [93msrc/serial_read/serial_read.ino[0m
+	@/usr/bin/ino preproc  -o $@ $^
+
+
+all : .build/mega2560/src/serial_read/serial_read.cpp
+	@true
+
