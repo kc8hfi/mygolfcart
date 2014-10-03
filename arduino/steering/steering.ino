@@ -6,7 +6,7 @@
 //the first interrupt is steer_interrupt_1,
 //and the second one is steer_interrupt_2
 #define STEER_INTERRUPT_1 4
-#define STEER_INTERRUPT_2 5
+//#define STEER_INTERRUPT_2 5
 
 //the pin numbers each signal is hooked to
 #define STEER_PIN_1 19
@@ -28,8 +28,12 @@
 
 //full left: -1500
 //full right: 1900
-#define HOW_FAR_LEFT  -900
-#define HOW_FAR_RIGHT 900
+// #define HOW_FAR_LEFT  -900
+// #define HOW_FAR_RIGHT 900
+
+#define HOW_FAR_LEFT  -800
+#define HOW_FAR_RIGHT 800
+
 
 volatile double steeringAngle;
 volatile boolean inter_1_state;
@@ -72,30 +76,36 @@ void steer_inter_1()
           else
                steeringAngle = steeringAngle + STEER_UNIT;
      }
+     
+     //make sure the number is withing the range
+     if (steeringAngle < HOW_FAR_LEFT)  //left is negative number
+          steer.write(STEER_STOP);
+     else if (steeringAngle > HOW_FAR_RIGHT)
+          steer.write(STEER_STOP);
      //Serial.println(steeringAngle);     
 }
 
-void steer_inter_2()
-{
-     //Serial.println("interrupt 2");    
-     inter_1_state = digitalRead(STEER_PIN_1);
-     inter_2_state = digitalRead(STEER_PIN_2);
-     if (inter_1_state)
-     {
-          if(inter_2_state)
-               steeringAngle = steeringAngle - STEER_UNIT;
-          else
-               steeringAngle = steeringAngle + STEER_UNIT;
-     }
-     else
-     {
-          if(inter_2_state)
-               steeringAngle = steeringAngle + STEER_UNIT;
-          else
-               steeringAngle = steeringAngle - STEER_UNIT;
-     }     
-     //Serial.println(steeringAngle);
-}
+// void steer_inter_2()
+// {
+//      //Serial.println("interrupt 2");    
+//      inter_1_state = digitalRead(STEER_PIN_1);
+//      inter_2_state = digitalRead(STEER_PIN_2);
+//      if (inter_1_state)
+//      {
+//           if(inter_2_state)
+//                steeringAngle = steeringAngle - STEER_UNIT;
+//           else
+//                steeringAngle = steeringAngle + STEER_UNIT;
+//      }
+//      else
+//      {
+//           if(inter_2_state)
+//                steeringAngle = steeringAngle + STEER_UNIT;
+//           else
+//                steeringAngle = steeringAngle - STEER_UNIT;
+//      }     
+//      //Serial.println(steeringAngle);
+// }
 
 void logger(String t)
 {
@@ -114,15 +124,15 @@ void doSomething(String s)
 {
      time = millis();
      String log = "receive: " + s;
-     if(s == "BVL")
+     if(s == "BVL" || s == "bvl")
      {
           logger(log);
           steer.write(STEER_L_SPEED);
           if (going_left)
-               going_left = 0;
+              going_left = 0;
 
      }
-     else if(s == "EVL")
+     else if(s == "EVL" || s == "evl")
      {
           log += " how far: ";
           char t[10];
@@ -139,14 +149,14 @@ void doSomething(String s)
                going_right = 1;
           }
      }
-     else if(s == "BVR")
+     else if(s == "BVR" || s == "bvr")
      {
           logger(log);
           steer.write(STEER_R_SPEED);
           if (going_right)
                going_right = 0;
      }
-     else if(s == "EVR")
+     else if(s == "EVR" || s == "evr")
      {
           log += " how far: ";
           char t[10];
@@ -166,7 +176,13 @@ void doSomething(String s)
      {
           log += " at: ";
           char t[10];
+          log += "gl: ";
+          log += dtostrf(going_left,1,0,t);
+          log += " hf: " ;
+          log += dtostrf(HOW_FAR_LEFT,1,3,t);
+          log += " strang: ";
           log += dtostrf(steeringAngle,1,3,t);
+          
           logger(log);
 
      }
@@ -181,7 +197,7 @@ void setup()
 
      //attach interrupts for the steering encoder motor
      attachInterrupt(STEER_INTERRUPT_1, steer_inter_1, CHANGE); 
-     attachInterrupt(STEER_INTERRUPT_2, steer_inter_2, CHANGE);
+     //attachInterrupt(STEER_INTERRUPT_2, steer_inter_2, CHANGE);
 
      steer.attach(STEER_PIN);
      steeringAngle = 0.0;
