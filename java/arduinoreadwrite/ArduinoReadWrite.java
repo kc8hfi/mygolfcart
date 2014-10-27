@@ -28,7 +28,11 @@ import java.io.OutputStreamWriter;
  * javac -cp /usr/share/java/RXTXcomm.jar:. *.java
  * 
  * to run:
+<<<<<<< HEAD:java/readwrite/readwrite.java
  * java -cp /usr/share/java/RXTXcomm.jar:. -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM0    readwrite
+=======
+ * java -cp /usr/share/java/RXTXcomm.jar:. ArduinoReadWrite
+>>>>>>> 2874c5b69561e811346c201183ddeaca55c4c57e:java/arduinoreadwrite/ArduinoReadWrite.java
  * 
  * You'll need the RXTX library installed, and then specify
  * the path to the RXTXcomm.jar file.  Depending your linux distro, 
@@ -39,7 +43,7 @@ import java.io.OutputStreamWriter;
  * out to the serial port.  Use this arduino code to test this java program.
  */
 
-public class readwrite 
+public class ArduinoReadWrite 
 {
 
      private OutputStream out;
@@ -49,7 +53,7 @@ public class readwrite
           return out;
      }
      
-     public readwrite() 
+     public ArduinoReadWrite() 
      {
           super();
      }
@@ -140,15 +144,20 @@ public static void main(String[] args)
      String input = "";
      try 
      {
+<<<<<<< HEAD:java/readwrite/readwrite.java
           readwrite mytester = new readwrite();
           mytester.connect("/dev/ttyACM0");
+=======
+          ArduinoReadWrite mytester = new ArduinoReadWrite();
+          mytester.connect("/dev/ttyS8");
+>>>>>>> 2874c5b69561e811346c201183ddeaca55c4c57e:java/arduinoreadwrite/ArduinoReadWrite.java
           OutputStream mystream = mytester.getTheStream();
           
           BufferedWriter mywriter = new BufferedWriter(new OutputStreamWriter(mystream));
           
           ConsoleReadingThread consoleReader1 = new ConsoleReadingThread(mywriter,reader,"Reader One:");
           consoleReader1.start();
-          //(new readwrite()).connect("/dev/ttyS8");
+          //(new ArduinoReadWrite()).connect("/dev/ttyS8");
           System.out.println("the serial port is good to go");
      }
      catch ( Exception e )
