@@ -33,6 +33,8 @@ see www.solutions-cubed.com for additional information.
 #include <Wire.h>
 #include <math.h>
 #include <stdlib.h>
+#include <Servo.h>
+#include <SPI.h>
 
 #define BAUD 115200
 
@@ -41,8 +43,68 @@ see www.solutions-cubed.com for additional information.
 
 #define ledPin 13   //led pin
 
+//turn on the power for everything?
+//not sure what pin 31 is for, 
+//pin 32 kicks the relay that turns on power for everything it seems
+
+#define RELAY_POWER     32
+
+//full left: -1500
+//full right: 1900
+// #define HOW_FAR_LEFT  -900
+// #define HOW_FAR_RIGHT 900
+
+#define HOW_FAR_LEFT  -800
+#define HOW_FAR_RIGHT 800
+
+//motor pulse to make it go left and right
+#define STEER_R_SPEED    1200 //orig 1000
+#define STEER_L_SPEED    1800 //orig 2000
+#define STEER_STOP      1500
+
+//the pin numbers each signal is hooked to
+#define STEER_PIN_1 19
+#define STEER_PIN_2 18
+
+#define STEER_UNIT      .25 // the model#  360/10000
+
+#define STEER_PIN   9
+
+//steering optical encoder has 2 interrupts
+//the first interrupt is steer_interrupt_1,
+//and the second one is steer_interrupt_2
+#define STEER_INTERRUPT_1 4
+//#define STEER_INTERRUPT_2 5
+
+
+/* brake stuff */
+#define SLAVE_SELECT    53
+
+#define BRAKE_ON_PIN    38 //pin 2
+#define BRAKE_OFF_PIN   39 //pin 3
+#define BRAKE_PIN   8
+
+#define BRAKE_APPLY  1000
+#define BRAKE_RELEASE 2000
+
+/* movement stuff */
+#define RELAY_ACCEL 31
+#define RELAY_DIRECTION 30
+
+#define SPEED 1700
+
+
+volatile int brake_status = 0; // 0=release, 1=applying, 2=not moving
+int is_brake;  //0=false, 1=true
+int brake_on_state;
+int brake_off_state;
+volatile boolean brake_set = false;
+
+Servo brake;
+
+
 /*
- * reading sensor status
+ * reading hall effect sensor status
  */
 int hallState = 0;  
 
@@ -84,14 +146,39 @@ unsigned long thetime = 0;
 //keep track if we got a response or not
 int noResponse = 0;
 
-/*
- * logger function to write stuff back out the serial port
- */
-void logger(String t)
+
+//0 - steering wheel will not go back to center
+//1 - seering wheel will go back to center
+int auto_center = 1;
+
+volatile double steeringAngle;
+volatile boolean inter_1_state;
+volatile boolean inter_2_state;
+
+volatile double testing = 123.45;
+
+int going_right = 0;
+int going_left = 0;
+
+Servo steer;
+
+unsigned int formatDACommand(unsigned int value)
 {
-     Serial.println(t);
-     //Serial1.println(t);
-}//end logger
+  value = value<<1;
+  value = value & 8190;          //B0001111111111110
+  return value;
+}
+
+void setAccel(unsigned int value)
+{
+  //currentForwardSpeed += value;
+  
+  value = formatDACommand(value);
+  digitalWrite(SLAVE_SELECT,LOW);
+  SPI.transfer(value>>8);
+  SPI.transfer(value);
+  digitalWrite(SLAVE_SELECT,HIGH); 
+}
 
 /*  
  * Send register address and the byte value you want to write the accelerometer and 
@@ -263,6 +350,90 @@ void get_TiltHeading(void)
     //Serial.println(Heading);    
 }  
 
+void brakePulse()
+{
+/*     
+start now
+1
+0
+0
+receive: bb
+1
+0
+1
+receive: eb
+0
+1
+0     
+*/ 
+//      Serial.println(brake_on_state);//switch underneath
+//      Serial.println(brake_off_state);//switch on the brake pedal
+     
+     brake_on_state = digitalRead(BRAKE_ON_PIN);
+     brake_off_state = digitalRead(BRAKE_OFF_PIN);
+//      if (brake_status == 1)
+//      {
+//           Serial.println("begin braking");
+//      }
+//      else if (brake_status == 0);
+//      {
+//           Serial.println("end braking");
+//      }
+     if(brake_on_state == 0 && brake_status == 1)  //stop moving the motor
+     {
+          brake.writeMicroseconds(1500);
+          brake_status = 2;
+          is_brake = 1;
+          logger("stopped the motor!");
+     }
+     if(brake_off_state == 0  && brake_status == 0)
+     {
+          brake.writeMicroseconds(1500);
+          brake_status = 2;
+          is_brake = 0;
+          logger("stopped motor other way!");
+     }
+//      if (brake_on_state == 0)
+//      {
+//           brake.writeMicroseconds(2000);
+//      }
+//      else
+//      {
+//           brake.writeMicroseconds(1500);
+//      }
+     
+     
+//      if (brake_status == 1 && brake_on_state == 0)
+//      {
+//           brake.writeMicroseconds(2000);     //apply brakes
+//      }
+//      else if (brake_status == 0 && brake_off_state == 0)
+//      {
+//           brake.writeMicroseconds(1000);     //release brakes
+//      }
+//      else
+//      {
+//           brake.writeMicroseconds(1500);     //stop brake motor
+//      }
+     
+     
+//      if (brake_off_state == 0 && brake_status == 1)
+//      {
+//           //stop moving the brake motor!
+//           brake.writeMicroseconds(1500);
+//           brake_status = 2;
+//      }
+//      if (brake_on_state == 0 && brake_off_state == 0)
+//      {
+//           //stop moving the brake motor
+//           brake.writeMicroseconds(1500);
+//      }
+     
+     //return;
+}//end brakePulse
+
+
+
 /*
  * turn a float into a string
  */
@@ -308,13 +479,101 @@ void setup()
      
      attachInterrupt(hall_effect_interrupt_num,hallEffect,FALLING);    //not sure of 3rd param
      
+     //attach interrupts for the steering encoder motor
+     attachInterrupt(STEER_INTERRUPT_1, steer_inter_1, CHANGE); 
+
+     //attach the pin to the steering
+     steer.attach(STEER_PIN);
+     steeringAngle = 0.0;
+     
+     //get ready to turn on the power
+     pinMode(RELAY_POWER,OUTPUT);     
+     
+     //turn on the power now
+     digitalWrite(RELAY_POWER,LOW);
+     
+     //make sure steer motor ain't moving
+     steer.writeMicroseconds(STEER_STOP);
+
+     pinMode(BRAKE_ON_PIN, INPUT_PULLUP);
+     pinMode(BRAKE_OFF_PIN, INPUT_PULLUP);  
+     brake.attach(BRAKE_PIN);
+
+     //make sure the brake motor is NOT running
+     brake.writeMicroseconds(1500);
+
+     //Inits the Accerator stuff to change speed or resistance on the 
+     // maxim chip
+     pinMode(SLAVE_SELECT, OUTPUT);
+     SPI.setDataMode(SPI_MODE0);
+     SPI.setClockDivider(SPI_CLOCK_DIV2);
+     SPI.setBitOrder(MSBFIRST);
+     SPI.begin();     
+
+     //not sure what this is
+     pinMode(RELAY_ACCEL,OUTPUT);
+     digitalWrite(RELAY_ACCEL,LOW);
+
+     
      //log ready message
      Serial.println("arduino ready");
 
      Wire.begin();
      init_Compass();
+}//end setup
+
+void steer_inter_1()
+{
+     //Serial.println("interrupt 1");
+     inter_1_state = digitalRead(STEER_PIN_1);
+     inter_2_state = digitalRead(STEER_PIN_2);
+     if (inter_2_state)
+     {
+          if(inter_1_state)
+               steeringAngle = steeringAngle + STEER_UNIT;
+          else
+               steeringAngle = steeringAngle - STEER_UNIT;
+     }
+     else
+     {
+          if(inter_1_state)
+               steeringAngle = steeringAngle - STEER_UNIT;
+          else
+               steeringAngle = steeringAngle + STEER_UNIT;
+     }
+     
+     //make sure the number is withing the range
+     if (steeringAngle < HOW_FAR_LEFT)  //left is negative number
+          steer.write(STEER_STOP);
+     else if (steeringAngle > HOW_FAR_RIGHT)
+          steer.write(STEER_STOP);
+     //Serial.println(steeringAngle);     
 }
 
+
+/*
+ * logger function to write stuff back out the serial port
+ */
+void logger(String t)
+{
+     Serial.println(t);
+     //Serial1.println(t);
+}//end logger
+
+
+/*
+ * BVL,bvl - begin vehicle left
+ * BVR,bvr - begin vehicle right
+ * EVL,evl - end vehicle left
+ * EVR,evr - end vehicle right
+ * BB,bb  - apply brake
+ * EB,eb  - end brake
+ * SBM,sbm - stop brake motor!!!
+ * BVF,bvf - begin vehicle forward
+ * EVF,evf - end vehicle forward
+ * status - prints out the heading from the compass
+ * ping - heartbeat from the server, replies with pong
+ */
 
 /*
  * this function does it all.
@@ -342,8 +601,112 @@ void doSomething(String s)
           //Serial.println("pong");
           //Serial.println(millis());
      }
+     else if(s == "BVL" || s == "bvl")
+     {
+          log = log + s;
+          logger(log);
+          steer.write(STEER_L_SPEED);
+          if (going_left)
+              going_left = 0;
+
+     }
+     else if(s == "EVL" || s == "evl")
+     {
+          log += s;
+          log += " how far: ";
+          char t[10];
+          log += dtostrf(steeringAngle,1,3,t);
+          //log += dtostrf(testing,1,3,t);
+          logger(log);
+          //stop
+          steer.write(STEER_STOP);
+          
+          if (auto_center)
+          {
+               logger("now go back to 0");
+               steer.write(STEER_R_SPEED);
+               going_right = 1;
+          }
+     }
+     else if(s == "BVR" || s == "bvr")
+     {
+          log += s;
+          logger(log);
+          steer.write(STEER_R_SPEED);
+          if (going_right)
+               going_right = 0;
+     }
+     else if(s == "EVR" || s == "evr")
+     {
+          log += s;
+          log += " how far: ";
+          char t[10];
+          log += dtostrf(steeringAngle,1,3,t);
+          logger(log);
+          //stop
+          steer.write(STEER_STOP);
+          
+          if (auto_center)
+          {
+               logger("now go back to 0");
+               steer.write(STEER_L_SPEED);
+               going_left = 1;
+          }
+     }
+     else if (s == "BB" || s == "bb")
+     {
+          log += s;
+          logger(log);
+          brake.writeMicroseconds(2000);
+          brake_status = 1; // 1 = the brake is being applied
+          
+          //2000 applies the brakes
+          //1000 releases the brakes 
+          //1500 stops moving the brakes
+     }
+     else if (s == "EB" || s == "eb")
+     {
+          log += s;
+          logger(log);
+          brake.writeMicroseconds(1000);
+          brake_status = 0;
+     }
+     else if (s == "SBM" || s == "sbm")
+     {
+          log += s;
+          logger(log);
+          brake.writeMicroseconds(1500);
+          logger("stop motor");
+          //brake_status = 0;
+     }
+     else if (s == "BVF" || s == "bvf")
+     {
+          log += s;
+          logger(log);
+          //this code works
+          //unsigned int val = 1400;
+          //setAccel(abs(val));
+          
+          setAccel(abs(SPEED));
+     }
+     else if (s == "EVF" || s == "evf")
+     {
+          log += s;
+          logger(log);
+          setAccel(0);
+     }
+
      else
      {
+          log += " at: ";
+          char t[10];
+          log += "gl: ";
+          log += dtostrf(going_left,1,0,t);
+          log += " hf: " ;
+          log += dtostrf(HOW_FAR_LEFT,1,3,t);
+          log += " strange: ";
+          log += dtostrf(steeringAngle,1,3,t);
+          
           log += "nomatch:" + s;
           logger(log);
      }
@@ -351,11 +714,12 @@ void doSomething(String s)
 
 void loop()
 {
-    get_Accelerometer();
-    get_Magnetometer();
-    get_TiltHeading();
-    
-    //delay(100);
+     brakePulse();
+     get_Accelerometer();
+     get_Magnetometer();
+     get_TiltHeading();
+
+     //delay(100);
     
      if (stringComplete)
      {
@@ -364,6 +728,36 @@ void loop()
           doSomething(inputString);
           inputString = "";
           stringComplete = false;
+     }
+     else
+     {
+          if (going_right)
+          {
+               if (steeringAngle < 0.0 )
+               {
+                    going_right = 1;
+                    steer.write(STEER_R_SPEED);
+               }
+               else
+               {
+                    steer.write(STEER_STOP);
+                    going_right = 0;
+               }
+          }
+          if (going_left)
+          {
+               if (steeringAngle > 0.0 )
+               {
+                    going_left = 1;
+                    steer.write(STEER_L_SPEED);
+               }
+               else
+               {
+                    steer.write(STEER_STOP);
+                    going_left = 0;
+               }
+               
+          }          
      }
      if ( (millis() - thetime) > 6000)
      {

@@ -5,6 +5,18 @@ void loop();
 void serialEvent();
 #line 1 "src/serial_read/serial_read.ino"
 /*
+ * this program is set up to be compiled from ino, and not
+ * the arduino ide.
+ * 
+ * You can still compile it with the arduino ide, do this:
+ * 
+ * 1.  make a directory called serialread
+ * 2.  put the serial_read.ino inside the serialread directory
+ * 3.  rename the serial_read.ino to serialread.ino
+ * 4.  open the serialread.ino file with the arduino and compile away!!
+ */
+
+/*
  * read from Serial, and write back to Serial and Serial1
  */
 

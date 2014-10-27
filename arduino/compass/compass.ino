@@ -257,6 +257,11 @@ void doSomething(String s)
      thetime = millis();
      String log = "receive: " + s + " - ";
      log = "";
+     
+     //remove this line later
+     Serial.println(s);
+     
+     
      if (s == "status")
      {
           log = log + "Status,";
