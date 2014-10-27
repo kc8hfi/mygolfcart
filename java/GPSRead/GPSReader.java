@@ -28,7 +28,7 @@ import java.io.OutputStreamWriter;
  * javac -cp /usr/share/java/RXTXcomm.jar:. *.java
  * 
  * to run:
- * java -cp /usr/share/java/RXTXcomm.jar:. readwrite
+ * java -cp /usr/share/java/RXTXcomm.jar:. -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM0    readwrite
  * 
  * You'll need the RXTX library installed, and then specify
  * the path to the RXTXcomm.jar file.  Depending your linux distro, 

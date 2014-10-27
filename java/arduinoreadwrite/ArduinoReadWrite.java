@@ -12,27 +12,15 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 /*
- * on a fedora box, and possibly any other linux distro,  you're going to need to make some 
- * symlinks to point to the actual serial port.
- * The mega2560 shows up as a /dev/ttyACM0 device, but the RXTX library doesn't pick up
- * ttyACM devices - it only deals with ttyS devices.
- * So, make a symlink to /dev/ttyACM0, or whatever number the computer assigned it.  
- * 
- * ln -s /dev/ttyACM0 /dev/ttyS10
- * 
- * of course, replace the ttyACM0 with whatever your arduino is,
- * and replace ttyS10 with whatever number is not already in /dev
- * 
- * 
  * to compile:
  * javac -cp /usr/share/java/RXTXcomm.jar:. *.java
  * 
+ * If your serial port isn't detected when you try to connect to it,  specify it as an 
+ * execution parameter.  
+ * for example, -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM0:/dev/ttyS8:/dev/<your serial port name here>
+ * 
  * to run:
-<<<<<<< HEAD:java/readwrite/readwrite.java
- * java -cp /usr/share/java/RXTXcomm.jar:. -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM0    readwrite
-=======
- * java -cp /usr/share/java/RXTXcomm.jar:. ArduinoReadWrite
->>>>>>> 2874c5b69561e811346c201183ddeaca55c4c57e:java/arduinoreadwrite/ArduinoReadWrite.java
+ * java -cp /usr/share/java/RXTXcomm.jar:. -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM0    ArduinoReadWrite
  * 
  * You'll need the RXTX library installed, and then specify
  * the path to the RXTXcomm.jar file.  Depending your linux distro, 
@@ -144,13 +132,8 @@ public static void main(String[] args)
      String input = "";
      try 
      {
-<<<<<<< HEAD:java/readwrite/readwrite.java
-          readwrite mytester = new readwrite();
-          mytester.connect("/dev/ttyACM0");
-=======
           ArduinoReadWrite mytester = new ArduinoReadWrite();
-          mytester.connect("/dev/ttyS8");
->>>>>>> 2874c5b69561e811346c201183ddeaca55c4c57e:java/arduinoreadwrite/ArduinoReadWrite.java
+          mytester.connect("/dev/ttyACM0");
           OutputStream mystream = mytester.getTheStream();
           
           BufferedWriter mywriter = new BufferedWriter(new OutputStreamWriter(mystream));
