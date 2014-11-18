@@ -37,6 +37,9 @@
 
 #define SLAVE_SELECT    53
 #define SPEED 1700
+#define ACCEL_UNIT  100
+#define ACCEL_MIN   1000
+#define ACCEL_MAX   2000
 
 
 //turn on the power for everything?
@@ -136,6 +139,8 @@ int hallState = 0;  //reading sensor status
 int ticks = 0;
 int revolutions = 0;
 
+//set the initial speed to 0
+int currentSpeed = 0;
 
 //stuff to read a string from the serial port
 String inputString = "";
@@ -154,12 +159,11 @@ loads the destination register with the value you send
 */
 void WriteAccRegister(byte data, byte regaddress)
 {
-    
-    Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20
-    Wire.write(regaddress);
-    Wire.write(data);  
+     Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20
+     Wire.write(regaddress);
+     Wire.write(data);  
      Serial.println("before endtrans");
-    Wire.endTransmission();     
+     Wire.endTransmission();     
      Serial.println("broke above here");
 }
 
@@ -170,22 +174,22 @@ for the accelerometer register's contents
 byte ReadAccRegister(byte regaddress)
 {
      //0x29
-    byte data;
-    
-    
-    Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20  
-    Wire.write(regaddress);
-    Wire.endTransmission();
-  
-    //delayMicroseconds(100);
+     byte data;
 
-    Wire.requestFrom(0x19,1);   // Use accelerometer address for regs >=0x20
-    data = Wire.read();
-    Wire.endTransmission();   
 
-    //delayMicroseconds(100);
+     Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20  
+     Wire.write(regaddress);
+     Wire.endTransmission();
 
-    return data;  
+     //delayMicroseconds(100);
+
+     Wire.requestFrom(0x19,1);   // Use accelerometer address for regs >=0x20
+     data = Wire.read();
+     Wire.endTransmission();   
+
+     //delayMicroseconds(100);
+
+     return data;  
 }  
 
 
@@ -195,12 +199,12 @@ loads the destination register with the value you send
 */
 void WriteMagRegister(byte data, byte regaddress)
 {
-    Wire.beginTransmission(0x1E);   // Else use magnetometer address
-    Wire.write(regaddress);
-    Wire.write(data);  
-    Wire.endTransmission();     
+     Wire.beginTransmission(0x1E);   // Else use magnetometer address
+     Wire.write(regaddress);
+     Wire.write(data);  
+     Wire.endTransmission();     
 
-    //delayMicroseconds(100);
+     //delayMicroseconds(100);
 }
 
 /*  
@@ -209,35 +213,34 @@ for the magnetometer register's contents
 */
 byte ReadMagRegister(byte regaddress)
 {
-    byte data;
-    Wire.beginTransmission(0x1E);   // Else use magnetometer address  
-    Wire.write(regaddress);
-    Wire.endTransmission();
-  
-    //delayMicroseconds(100);
-    
-    Wire.requestFrom(0x1E,1);   // Else use magnetometer address
-    data = Wire.read();
-    Wire.endTransmission();   
+     byte data;
+     Wire.beginTransmission(0x1E);   // Else use magnetometer address  
+     Wire.write(regaddress);
+     Wire.endTransmission();
 
-    //delayMicroseconds(100);
+     //delayMicroseconds(100);
 
-    return data;  
+     Wire.requestFrom(0x1E,1);   // Else use magnetometer address
+     data = Wire.read();
+     Wire.endTransmission();   
+
+     //delayMicroseconds(100);
+
+     return data;  
 }  
 
 void init_Compass(void)
 {
      Serial.println("b WriteAccRegister");
-    WriteAccRegister(0x67,0x20);  // Enable accelerometer, 200Hz data output
-Serial.println("a WriteAccRegister");
+     WriteAccRegister(0x67,0x20);  // Enable accelerometer, 200Hz data output
+     Serial.println("a WriteAccRegister");
 
-
-    WriteMagRegister(0x9c,0x00);  // Enable temperature sensor, 220Hz data output
-    Serial.println("firstwrite mag");
-    WriteMagRegister(0x20,0x01);  // set gain to +/-1.3Gauss
-    Serial.println("second write mag");
-    WriteMagRegister(0x00,0x02);  // Enable magnetometer constant conversions
-    Serial.println("third writemag");
+     WriteMagRegister(0x9c,0x00);  // Enable temperature sensor, 220Hz data output
+     Serial.println("firstwrite mag");
+     WriteMagRegister(0x20,0x01);  // set gain to +/-1.3Gauss
+     Serial.println("second write mag");
+     WriteMagRegister(0x00,0x02);  // Enable magnetometer constant conversions
+     Serial.println("third writemag");
 }
 
 /*
@@ -246,19 +249,18 @@ serial monitor.
 */
 void get_Accelerometer(void)
 {
+     // accelerometer values
+     byte xh = ReadAccRegister(0x29);
+     byte xl = ReadAccRegister(0x28);
+     byte yh = ReadAccRegister(0x2B);
+     byte yl = ReadAccRegister(0x2A);
+     byte zh = ReadAccRegister(0x2D);
+     byte zl = ReadAccRegister(0x2C);
 
-  // accelerometer values
-  byte xh = ReadAccRegister(0x29);
-  byte xl = ReadAccRegister(0x28);
-  byte yh = ReadAccRegister(0x2B);
-  byte yl = ReadAccRegister(0x2A);
-  byte zh = ReadAccRegister(0x2D);
-  byte zl = ReadAccRegister(0x2C);
-  
-  // need to convert the register contents into a righ-justified 16 bit value
-  Accx = (xh<<8|xl); 
-  Accy = (yh<<8|yl); 
-  Accz = (zh<<8|zl); 
+     // need to convert the register contents into a righ-justified 16 bit value
+     Accx = (xh<<8|xl); 
+     Accy = (yh<<8|yl); 
+     Accz = (zh<<8|zl); 
 
 }  
 
@@ -268,18 +270,18 @@ serial monitor.
 */
 void get_Magnetometer(void)
 {  
-  // magnetometer values
-  byte xh = ReadMagRegister(0x03);
-  byte xl = ReadMagRegister(0x04);
-  byte yh = ReadMagRegister(0x07);
-  byte yl = ReadMagRegister(0x08);
-  byte zh = ReadMagRegister(0x05);
-  byte zl = ReadMagRegister(0x06);
-  
-  // convert registers to ints
-  Magx = (xh<<8|xl); 
-  Magy = (yh<<8|yl); 
-  Magz = (zh<<8|zl); 
+     // magnetometer values
+     byte xh = ReadMagRegister(0x03);
+     byte xl = ReadMagRegister(0x04);
+     byte yh = ReadMagRegister(0x07);
+     byte yl = ReadMagRegister(0x08);
+     byte zh = ReadMagRegister(0x05);
+     byte zl = ReadMagRegister(0x06);
+
+     // convert registers to ints
+     Magx = (xh<<8|xl); 
+     Magy = (yh<<8|yl); 
+     Magz = (zh<<8|zl); 
 }  
 
 /*
@@ -292,7 +294,7 @@ void get_TiltHeading(void)
 //   Mag_minx = -621;
 //   Mag_miny = -901;
 //   Mag_minz = -537;
-//   Mag_maxx = 362;
+//   Mag_maxx = 362;s
 //   Mag_maxy = 269;
 //   Mag_maxz = 465;
      
@@ -305,32 +307,32 @@ void get_TiltHeading(void)
      Mag_maxz = 574;
      
   
-  // use calibration values to shift and scale magnetometer measurements
-  Magx = (Magx-Mag_minx)/(Mag_maxx-Mag_minx)*2-1;  
-  Magy = (Magy-Mag_miny)/(Mag_maxy-Mag_miny)*2-1;  
-  Magz = (Magz-Mag_minz)/(Mag_maxz-Mag_minz)*2-1;  
+     // use calibration values to shift and scale magnetometer measurements
+     Magx = (Magx-Mag_minx)/(Mag_maxx-Mag_minx)*2-1;  
+     Magy = (Magy-Mag_miny)/(Mag_maxy-Mag_miny)*2-1;  
+     Magz = (Magz-Mag_minz)/(Mag_maxz-Mag_minz)*2-1;  
 
-  // Normalize acceleration measurements so they range from 0 to 1
-  float accxnorm = Accx/sqrt(Accx*Accx+Accy*Accy+Accz*Accz);
-  float accynorm = Accy/sqrt(Accx*Accx+Accy*Accy+Accz*Accz);
-  
-  // calculate pitch and roll
-  Pitch = asin(-accxnorm);
-  Roll = asin(accynorm/cos(Pitch));
+     // Normalize acceleration measurements so they range from 0 to 1
+     float accxnorm = Accx/sqrt(Accx*Accx+Accy*Accy+Accz*Accz);
+     float accynorm = Accy/sqrt(Accx*Accx+Accy*Accy+Accz*Accz);
 
-  // tilt compensated magnetic sensor measurements
-  float magxcomp = Magx*cos(Pitch)+Magz*sin(Pitch);
-  float magycomp = Magx*sin(Roll)*sin(Pitch)+Magy*cos(Roll)-Magz*sin(Roll)*cos(Pitch);
-  
-  // arctangent of y/x converted to degrees
-  Heading = 180*atan2(magycomp,magxcomp)/PI;
+     // calculate pitch and roll
+     Pitch = asin(-accxnorm);
+     Roll = asin(accynorm/cos(Pitch));
 
-  if (Heading < 0)
-      Heading +=360;
+     // tilt compensated magnetic sensor measurements
+     float magxcomp = Magx*cos(Pitch)+Magz*sin(Pitch);
+     float magycomp = Magx*sin(Roll)*sin(Pitch)+Magy*cos(Roll)-Magz*sin(Roll)*cos(Pitch);
 
-    //Serial.print("Heading=");
-    //Serial.println(Heading);    
-  }  
+     // arctangent of y/x converted to degrees
+     Heading = 180*atan2(magycomp,magxcomp)/PI;
+
+     if (Heading < 0)
+          Heading +=360;
+
+     //Serial.print("Heading=");
+     //Serial.println(Heading);    
+}  
 
 String fixFloat(float d)
 {
@@ -345,22 +347,19 @@ String fixFloat(float d)
 
 unsigned int formatDACommand(unsigned int value)
 {
-  value = value<<1;
-  value = value & 8190;          //B0001111111111110
-  return value;
+     value = value<<1;
+     value = value & 8190;          //B0001111111111110
+     return value;
 }
 
 void setAccel(unsigned int value)
 {
-  //currentForwardSpeed += value;
-  
-  value = formatDACommand(value);
-  digitalWrite(SLAVE_SELECT,LOW);
-  SPI.transfer(value>>8);
-  SPI.transfer(value);
-  digitalWrite(SLAVE_SELECT,HIGH); 
+     value = formatDACommand(value);
+     digitalWrite(SLAVE_SELECT,LOW);
+     SPI.transfer(value>>8);
+     SPI.transfer(value);
+     digitalWrite(SLAVE_SELECT,HIGH); 
 }
-
 
 void steer_inter_1()
 {
@@ -536,6 +535,8 @@ void tickhandler()
  * EVR    end vehicle right
  * FWD    switch direction to forward
  * REV    switch direction to reverse
+ * f      faster
+ * s      slower
  * status prints out heading, ticks, revolutions
  * ping   writes pong back to the serial port
  */ 
@@ -562,11 +563,13 @@ void doSomething(String s)
           //setAccel(abs(val));
           
           setAccel(abs(SPEED));
+          currentSpeed = SPEED;
      }
      else if (s == "EVF" || s == "evf")
      {
           logger(log);
           setAccel(0);
+          currentSpeed = 0;
      }
 
      else if (s == "BB" || s == "bb")
@@ -656,6 +659,22 @@ void doSomething(String s)
      {
           digitalWrite(RELAY_DIRECTION,LOW);
      }
+     else if(s == "f")
+     {
+          if(currentSpeed < ACCEL_MAX)
+          {
+               currentSpeed += ACCEL_UNIT;
+               setAccel(abs(currentSpeed));
+          }
+     }
+     else if(s == "s")
+     {
+          if (currentSpeed > ACCEL_MIN)
+          {
+               currentSpeed -= ACCEL_UNIT;
+               setAccel(abs(currentSpeed));
+          }
+     }
      else if(s == "STATUS" || s == "status")
      {
           log = log + "heading,";
@@ -672,6 +691,10 @@ void doSomething(String s)
           log += "revolutions,";
           dtostrf(revolutions,1,0,convert);
           log += convert; 
+          
+          log += "speed,";
+          dtostrf(currentSpeed,1,0,convert);
+          log+= convert;
           
           logger(log);
      }
@@ -792,10 +815,8 @@ void loop()
                     steer.write(STEER_STOP);
                     going_left = 0;
                }
-               
           }
      }
-     
 }
 
 void serialEvent()
