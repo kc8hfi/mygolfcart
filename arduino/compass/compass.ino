@@ -69,10 +69,13 @@ loads the destination register with the value you send
 */
 void WriteAccRegister(byte data, byte regaddress)
 {
+    
     Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20
     Wire.write(regaddress);
     Wire.write(data);  
+     Serial.println("before endtrans");
     Wire.endTransmission();     
+     Serial.println("broke here");
 }
 
 /*  
@@ -139,11 +142,17 @@ byte ReadMagRegister(byte regaddress)
 
 void init_Compass(void)
 {
+     Serial.println("b WriteAccRegister");
     WriteAccRegister(0x67,0x20);  // Enable accelerometer, 200Hz data output
+Serial.println("a WriteAccRegister");
+
 
     WriteMagRegister(0x9c,0x00);  // Enable temperature sensor, 220Hz data output
+    Serial.println("firstwrite mag");
     WriteMagRegister(0x20,0x01);  // set gain to +/-1.3Gauss
+    Serial.println("second write mag");
     WriteMagRegister(0x00,0x02);  // Enable magnetometer constant conversions
+    Serial.println("third writemag");
 }
 
 /*
@@ -292,11 +301,15 @@ void setup()
      Serial1.begin(115200);
 
      //log ready message
+     
      Serial.println("arduino ready");
-     Serial1.println("arduino ready");
 
      Wire.begin();
+     Serial.println("after wire.begin");
      init_Compass();
+     Serial.println("after init compass");
+     
+ 
 }
   
 void loop() 
