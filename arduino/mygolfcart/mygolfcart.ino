@@ -417,6 +417,29 @@ void logger(String t)
      //Serial1.println(t);
 }
 
+
+//this is for the hall effect sensor
+void tickhandler()
+{
+     ticks++;
+     if (ticks >7)
+     {
+          ticks = 0;
+          revolutions++;
+     }
+     //char convert[20];
+     //dtostrf(ticks,1,0,convert);
+     //dtostrf(revolutions,1,0,convert);
+     
+     //this is how to get the counts of ticks and revolutions
+     //Serial.println(convert);
+     
+     //Serial.println("tick count: " + ticks);
+     //Serial.println("revolutions: " + revolutions);
+     
+     digitalWrite(ledPin, !digitalRead(ledPin) );
+}
+
 void brakePulse()
 {
 /*     
@@ -499,29 +522,6 @@ receive: eb
      //return;
 }
 
-//this is for the hall effect sensor
-void tickhandler()
-{
-     ticks++;
-     if (ticks >7)
-     {
-          ticks = 0;
-          revolutions++;
-     }
-     //char convert[20];
-     //dtostrf(ticks,1,0,convert);
-     //dtostrf(revolutions,1,0,convert);
-     
-     //this is how to get the counts of ticks and revolutions
-     //Serial.println(convert);
-     
-     //Serial.println("tick count: " + ticks);
-     //Serial.println("revolutions: " + revolutions);
-     
-     digitalWrite(ledPin, !digitalRead(ledPin) );
-}
-
-
 
 /*
  * BVF    begin vehicle forward
@@ -545,7 +545,8 @@ void doSomething(String s)
 {
      time = millis();
      String log = "receive: " + s;
-          brake_on_state = digitalRead(BRAKE_ON_PIN);
+     
+     brake_on_state = digitalRead(BRAKE_ON_PIN);
      brake_off_state = digitalRead(BRAKE_OFF_PIN);
      
 //      Serial.print("on:");
@@ -665,6 +666,10 @@ void doSomething(String s)
           {
                currentSpeed += ACCEL_UNIT;
                setAccel(abs(currentSpeed));
+               char convert[20];
+               dtostrf(currentSpeed,1,0,convert);
+               log += convert;
+               logger(log);
           }
      }
      else if(s == "s")
@@ -673,6 +678,10 @@ void doSomething(String s)
           {
                currentSpeed -= ACCEL_UNIT;
                setAccel(abs(currentSpeed));
+               char convert[20];
+               dtostrf(currentSpeed,1,0,convert);
+               log += convert;
+               logger(log);
           }
      }
      else if(s == "STATUS" || s == "status")
@@ -777,6 +786,7 @@ void setup()
 
 void loop()
 {
+     brakePulse();
      get_Accelerometer();
      get_Magnetometer();
      get_TiltHeading();
