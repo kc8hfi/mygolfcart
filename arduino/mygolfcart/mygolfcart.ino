@@ -3,6 +3,7 @@
 #include <Wire.h>
 #include <math.h>
 #include <stdlib.h>
+#include "Timer.h"
 
 #define BAUD 115200 
 
@@ -153,6 +154,9 @@ int noResponse = 0;
 //1 - seering wheel will go back to center
 int auto_center = 1;
 
+//used to have it print the status every second
+Timer t;
+
 /*  
 Send register address and the byte value you want to write the accelerometer and 
 loads the destination register with the value you send
@@ -162,9 +166,9 @@ void WriteAccRegister(byte data, byte regaddress)
      Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20
      Wire.write(regaddress);
      Wire.write(data);  
-     Serial.println("before endtrans");
+     //Serial.println("before endtrans");
      Wire.endTransmission();     
-     Serial.println("broke above here");
+     //Serial.println("broke above here");
 }
 
 /*  
@@ -231,16 +235,16 @@ byte ReadMagRegister(byte regaddress)
 
 void init_Compass(void)
 {
-     Serial.println("b WriteAccRegister");
+     //Serial.println("b WriteAccRegister");
      WriteAccRegister(0x67,0x20);  // Enable accelerometer, 200Hz data output
-     Serial.println("a WriteAccRegister");
+     //Serial.println("a WriteAccRegister");
 
      WriteMagRegister(0x9c,0x00);  // Enable temperature sensor, 220Hz data output
-     Serial.println("firstwrite mag");
+     //Serial.println("firstwrite mag");
      WriteMagRegister(0x20,0x01);  // set gain to +/-1.3Gauss
-     Serial.println("second write mag");
+     //Serial.println("second write mag");
      WriteMagRegister(0x00,0x02);  // Enable magnetometer constant conversions
-     Serial.println("third writemag");
+     //Serial.println("third writemag");
 }
 
 /*
@@ -474,14 +478,14 @@ receive: eb
           brake.writeMicroseconds(1500);
           brake_status = 2;
           is_brake = 1;
-          logger("stopped the motor!");
+          //logger("stopped the motor!");
      }
      if(brake_off_state == 0  && brake_status == 0)
      {
           brake.writeMicroseconds(1500);
           brake_status = 2;
           is_brake = 0;
-          logger("stopped motor other way!");
+          //logger("stopped motor other way!");
      }
 //      if (brake_on_state == 0)
 //      {
@@ -537,6 +541,7 @@ receive: eb
  * REV    switch direction to reverse
  * f      faster
  * s      slower
+ * rsticks     resets the tick counter to 0
  * status prints out heading, ticks, revolutions
  * ping   writes pong back to the serial port
  */ 
@@ -544,7 +549,7 @@ receive: eb
 void doSomething(String s)
 {
      time = millis();
-     String log = "receive: " + s;
+     String log = "status,";// + s +",";
      
      brake_on_state = digitalRead(BRAKE_ON_PIN);
      brake_off_state = digitalRead(BRAKE_OFF_PIN);
@@ -558,7 +563,7 @@ void doSomething(String s)
      
      if (s == "BVF" || s == "bvf")
      {
-          logger(log);
+          //logger(log);
           //this code works
           //unsigned int val = 1400;
           //setAccel(abs(val));
@@ -568,14 +573,14 @@ void doSomething(String s)
      }
      else if (s == "EVF" || s == "evf")
      {
-          logger(log);
+          //logger(log);
           setAccel(0);
           currentSpeed = 0;
      }
 
      else if (s == "BB" || s == "bb")
      {
-          logger(log);
+          //logger(log);
           brake.writeMicroseconds(2000);
           brake_status = 1; // 1 = the brake is being applied
           
@@ -585,7 +590,7 @@ void doSomething(String s)
      }
      else if (s == "EB" || s == "eb")
      {
-          logger(log);
+          //logger(log);
           brake.writeMicroseconds(1000);
           brake_status = 0;
      }
@@ -597,16 +602,16 @@ void doSomething(String s)
 //      }
      else if (s == "SM" || s == "sm")
      {
-          logger(log);
+          //logger(log);
           brake.writeMicroseconds(1000);
-          logger("stop motor");
+          //logger("stop motor");
           //brake_status = 0;
      }
 
      
      else if(s == "BVL" || s == "bvl")
      {
-          logger(log);
+          //logger(log);
           steer.write(STEER_L_SPEED);
           if (going_left)
               going_left = 0;
@@ -618,20 +623,20 @@ void doSomething(String s)
           char t[10];
           log += dtostrf(steeringAngle,1,3,t);
           //log += dtostrf(testing,1,3,t);
-          logger(log);
+          //logger(log);
           //stop
           steer.write(STEER_STOP);
           
           if (auto_center)
           {
-               logger("now go back to 0");
+               //logger("now go back to 0");
                steer.write(STEER_R_SPEED);
                going_right = 1;
           }
      }
      else if(s == "BVR" || s == "bvr")
      {
-          logger(log);
+          //logger(log);
           steer.write(STEER_R_SPEED);
           if (going_right)
                going_right = 0;
@@ -641,13 +646,13 @@ void doSomething(String s)
           log += " how far: ";
           char t[10];
           log += dtostrf(steeringAngle,1,3,t);
-          logger(log);
+          //logger(log);
           //stop
           steer.write(STEER_STOP);
           
           if (auto_center)
           {
-               logger("now go back to 0");
+               //logger("now go back to 0");
                steer.write(STEER_L_SPEED);
                going_left = 1;
           }
@@ -669,7 +674,7 @@ void doSomething(String s)
                char convert[20];
                dtostrf(currentSpeed,1,0,convert);
                log += convert;
-               logger(log);
+               //logger(log);
           }
      }
      else if(s == "s")
@@ -681,27 +686,42 @@ void doSomething(String s)
                char convert[20];
                dtostrf(currentSpeed,1,0,convert);
                log += convert;
-               logger(log);
+               //logger(log);
           }
+     }
+     else if (s == "rsticks")
+     {
+          ticks = 0;
+     }
+     else if (s == "1700" ||
+          s == "1000" || s == "1100" || s == "1200" || s == "1300" || s == "1400" ||
+          s == "1500" || s == "1600" || s == "1800" || s == "1900"
+     )
+     {
+          setAccel(abs(s.toInt()));
+          currentSpeed = s.toInt();
      }
      else if(s == "STATUS" || s == "status")
      {
-          log = log + "heading,";
+          //log = log + "heading,";
           Heading = round(Heading);
           char convert[20];
           //dtostrf(floatvar, minStringWidthIncludingDecimalPoint, numVarsAfterDecimal, charBuffer)
           dtostrf(Heading,1,0,convert);
           log += convert;
+          log += ",";
           
-          log = log + "ticks,";
+          //log = log + "ticks,";
           dtostrf(ticks,1,0,convert);
           log += convert;
+          log += ",";
           
-          log += "revolutions,";
+          //log += "revolutions,";
           dtostrf(revolutions,1,0,convert);
-          log += convert; 
+          log += convert;
+          log += ","; 
           
-          log += "speed,";
+          //log += "speed,";
           dtostrf(currentSpeed,1,0,convert);
           log+= convert;
           
@@ -709,7 +729,7 @@ void doSomething(String s)
      }
      else if (s == "PING" || s=="ping")
      {
-          logger("pong");
+          //logger("pong");
           //Serial.println("pong");
           //Serial.println(millis());
      }
@@ -724,9 +744,37 @@ void doSomething(String s)
           log += " steer angle: ";
           log += dtostrf(steeringAngle,1,3,t);
           
-          logger(log);
+          //logger(log);
      }
 }//end doSomething
+
+void printstatus()
+{
+     String log = "status,";
+     //log = log + "heading,";
+     Heading = round(Heading);
+     char convert[20];
+     //dtostrf(floatvar, minStringWidthIncludingDecimalPoint, numVarsAfterDecimal, charBuffer)
+     dtostrf(Heading,1,0,convert);
+     log += convert;
+     log += ",";
+     
+     //log = log + "ticks,";
+     dtostrf(ticks,1,0,convert);
+     log += convert;
+     log += ",";
+     
+     //log += "revolutions,";
+     dtostrf(revolutions,1,0,convert);
+     log += convert;
+     log += ","; 
+     
+     //log += "speed,";
+     dtostrf(currentSpeed,1,0,convert);
+     log+= convert;
+     
+     logger(log);
+}
 
 void setup()
 {
@@ -781,11 +829,14 @@ void setup()
      
      Wire.begin();
      init_Compass();
-     Serial.println("arduino ready");
+     
+     t.every(1000,printstatus);
+     //Serial.println("arduino ready");
 }//end setup
 
 void loop()
 {
+     t.update();
      brakePulse();
      get_Accelerometer();
      get_Magnetometer();
