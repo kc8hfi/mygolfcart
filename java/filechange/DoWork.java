@@ -31,7 +31,11 @@ public class DoWork
                     System.out.println("the file contains:'" +line +"'");
                     if (line.equals("script"))
                     {
-                         //this is where we call another program to open and execute the script file
+                         /*
+                          * this is where we call another program to open and execute the script file
+                          * you want to pass this program the cartinfo object, so that it'll have 
+                          * access to the data.  status.getString() will return the info.
+                          */
                     }
                     else
                     {
@@ -92,6 +96,7 @@ public class DoWork
                          writer.write(writeme);
                          writer.newLine();
                          writer.flush();
+                         
                          System.out.println("sent to arduino:'" +writeme +"'");
                          System.out.println("current status: '" + status.getString() + "'");
                     }

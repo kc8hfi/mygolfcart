@@ -31,7 +31,15 @@ public class readwrite
           //port = "/dev/tty.usbmodem1411";
           String consoleReaderName = "Reader";
           
-          //change this and put the full path to the file!!
+          /* change this and put the full path to the file!!
+           * /var/www/mainsite/data/comFile.txt  i believe is the name of the file
+           * 
+           * that the web page writes what command to execute.  
+           * the web page backend should be changed so that the remote and script radio
+           * buttons writes to this same file.  This program can handle both remote and script
+           * now.
+           */
+          
           String comfile = "testfile.txt";
           File thefile = new File(comfile);
           
@@ -49,8 +57,7 @@ public class readwrite
                consoleReader1.start();
                System.out.println("port: " + port + " ready");
                
-               //create an object that actually reads the file
-               //and then does the work
+               //create an object that actually reads the file and then does the work
                DoWork processcommands = new DoWork(thefile, mywriter, info);
 
                //monitor the file
