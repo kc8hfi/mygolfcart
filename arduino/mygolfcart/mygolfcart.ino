@@ -235,16 +235,16 @@ byte ReadMagRegister(byte regaddress)
 
 void init_Compass(void)
 {
-     //Serial.println("b WriteAccRegister");
+     Serial.println("b WriteAccRegister");
      WriteAccRegister(0x67,0x20);  // Enable accelerometer, 200Hz data output
-     //Serial.println("a WriteAccRegister");
+     Serial.println("a WriteAccRegister");
 
      WriteMagRegister(0x9c,0x00);  // Enable temperature sensor, 220Hz data output
-     //Serial.println("firstwrite mag");
+     Serial.println("firstwrite mag");
      WriteMagRegister(0x20,0x01);  // set gain to +/-1.3Gauss
-     //Serial.println("second write mag");
+     Serial.println("second write mag");
      WriteMagRegister(0x00,0x02);  // Enable magnetometer constant conversions
-     //Serial.println("third writemag");
+     Serial.println("third writemag");
 }
 
 /*
@@ -548,6 +548,7 @@ receive: eb
 
 void doSomething(String s)
 {
+     Serial.println(s);
      time = millis();
      String log = "status,";// + s +",";
      
@@ -782,6 +783,7 @@ void setup()
      Serial.begin(BAUD);
      Serial1.begin(BAUD);
 
+     
      //Inits the Accerator stuff to change speed or resistance on the 
      // maxim chip
      pinMode(SLAVE_SELECT, OUTPUT);
@@ -824,23 +826,25 @@ void setup()
      pinMode(RELAY_DIRECTION,OUTPUT);
      digitalWrite(RELAY_DIRECTION,HIGH);
      
+     
      pinMode(RELAY_ACCEL,OUTPUT);
      digitalWrite(RELAY_ACCEL,LOW);
      
      Wire.begin();
-     init_Compass();
      
+     //init_Compass();
+     //Serial.println("arduino ready");
      t.every(1000,printstatus);
      //Serial.println("arduino ready");
-}//end setup
+}//cend setup
 
 void loop()
 {
      t.update();
      brakePulse();
-     get_Accelerometer();
-     get_Magnetometer();
-     get_TiltHeading();
+     //get_Accelerometer();
+     //get_Magnetometer();
+     //get_TiltHeading();
      
      if (stringComplete)
      {

@@ -73,9 +73,10 @@ void WriteAccRegister(byte data, byte regaddress)
     Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20
     Wire.write(regaddress);
     Wire.write(data);  
-     Serial.println("before endtrans");
+    Serial.println("before endtrans");
+    Serial.println("broke right before endtransmission");
     Wire.endTransmission();     
-     Serial.println("broke here");
+    Serial.println("good now");
 }
 
 /*  
@@ -142,9 +143,9 @@ byte ReadMagRegister(byte regaddress)
 
 void init_Compass(void)
 {
-     Serial.println("b WriteAccRegister");
+    Serial.println("b WriteAccRegister");
     WriteAccRegister(0x67,0x20);  // Enable accelerometer, 200Hz data output
-Serial.println("a WriteAccRegister");
+    Serial.println("a WriteAccRegister");
 
 
     WriteMagRegister(0x9c,0x00);  // Enable temperature sensor, 220Hz data output

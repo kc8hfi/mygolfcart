@@ -206,7 +206,7 @@ void setup()
      pinMode(RELAY_POWER,OUTPUT);     
      
      //turn on the power now
-     digitalWrite(RELAY_POWER,LOW);
+     //digitalWrite(RELAY_POWER,LOW);
      
      //make sure steer motor ain't moving
      steer.writeMicroseconds(STEER_STOP);

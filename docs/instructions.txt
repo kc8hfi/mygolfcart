@@ -1,0 +1,5 @@
+make sure the light switch on the dash is turned on
+before you can manually give it gas/brake
+
+mega2560 rev2 board is giving a bunch of trouble with the compass
+
