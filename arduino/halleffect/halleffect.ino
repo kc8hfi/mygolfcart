@@ -9,7 +9,7 @@
  * 7 magnets, evenly spaced, 7.40518 inches apart
  */
 
-#define BAUD 115200
+#define BAUD 9600
  
  /*
  * black - orange - ground

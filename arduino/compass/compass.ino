@@ -299,7 +299,7 @@ void setup()
 {
      // Open the serial connection,
      Serial.begin(115200);
-     Serial1.begin(115200);
+     //Serial1.begin(115200);
 
      //log ready message
      
