@@ -1,3 +1,21 @@
 make sure the light switch on the dash is turned on
 before you can manually give it gas/brake
 
+
+reverse doesn't work yet
+
+
+the servo wires,  white,red,black.  Put the white wire closest to the dc jack and 
+next to the female headers that are standing up.  These headers do not have 
+anything plugged into them
+
+The ide cable
+the red stripe which is pin one, that goes on the left side.  the usb port 
+on the arduino is on the left
+
+Rasbperry pi
+plug usb cable from the gps that is on the roof.
+plug usb cable from the arduino into the pi
+plug the network cable in
+
+
