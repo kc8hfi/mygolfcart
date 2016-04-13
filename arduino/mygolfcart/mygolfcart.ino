@@ -18,6 +18,9 @@ boolean completeString = false;
 #define BRAKE_APPLY  1000
 #define BRAKE_RELEASE 2000
 
+//the fwd/rev relay
+byte fwd_rev = 34;
+
 volatile int brake_status = 0; // 0=release, 1=applying, 2=not moving
 int is_brake;  //0=false, 1=true
 int brake_on_state;
@@ -67,6 +70,8 @@ Servo steer;
 //1 - seering wheel will go back to center
 int auto_center = 1;
 
+byte throttlePin = 10;
+Servo throttle;
 
 /*
 BM004_Arduino_compass_tilt_compensated:  This program reads the magnetometer and
@@ -405,6 +410,13 @@ void setup()
      pinMode(mainPower, OUTPUT);
      digitalWrite(mainPower, LOW);
 
+     //attach the servo to the pin
+     throttle.attach(throttlePin);
+
+     //move the servo back to 0 degrees before you turn on the main power!!!
+     throttle.write(0);
+   
+     
      Serial.begin(115200);
 
      
@@ -535,6 +547,8 @@ void logger(String t)
  * evl - end vehicle left
  * bvr - begin vehicle right
  * evr - end vehicle right
+ * bvf - begin vehicle forward
+ * evf - end vehicle forward
  */
 
 void doSomething(String s)
@@ -620,6 +634,22 @@ void doSomething(String s)
                steer.write(STEER_L_SPEED);
                going_left = 1;
           }
+     }
+     else if (s == "BVF" || s == "bvf")
+     {
+          throttle.write(180);
+     }
+     else if(s == "EVF" || s == "evf")
+     {
+          throttle.write(0);
+     }
+     else if (s == "FWD" || s =="fwd")
+     {
+          digitalWrite(fwd_rev, HIGH);
+     }
+     else if (s == "REV" || s == "rev")
+     {
+          digitalWrite(fwd_rev, LOW);
      }
      else if (s == "status" || s == "STATUS")
      {
