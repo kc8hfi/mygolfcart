@@ -99,7 +99,7 @@ void doSomething(String s)
      else if (s =="f")
      {
           //throttle.write();  //put the position here, this is the angle to move to
-          throttle.write(100);
+          throttle.write(180);
           logger("to 100");
      }
      else if (s == "s")

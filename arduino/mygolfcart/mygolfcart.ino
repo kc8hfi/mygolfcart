@@ -397,8 +397,8 @@ void tickhandler()
           ticks = 0;
           revolutions++;
      }
-     Serial.println(ticks);
-     Serial.println(revolutions);
+     //Serial.println(ticks);
+     //Serial.println(revolutions);
      
      digitalWrite(ledPin, !digitalRead(ledPin) );
 }
