@@ -36,6 +36,12 @@ boolean completeString = false;
 
 void setup()
 {
+     for(int i=1;i<=53;i++)
+     {
+          pinMode(i,OUTPUT);
+          digitalWrite(i,LOW);
+     }
+     
      // Open the serial connection,
      Serial.begin(BAUD);
 
