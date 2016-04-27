@@ -1,9 +1,3 @@
-#include <Servo.h>
-#include <SPI.h>
-#include <Wire.h>
-#include <math.h>
-#include <stdlib.h>
-
 /*
  * hall effect sensor on the front wheel
  * black - 14 orange - ground
@@ -23,6 +17,8 @@
  * red - yellow - +5vdc
  */
 
+//main power pin
+byte mainPower = 32; 
 
 #define hall_effect_interrupt_num 0
 byte hall_effect_pin = 3;
@@ -30,16 +26,11 @@ byte hall_effect_pin = 3;
 
 #define ledPin 13   //led pin
 
+int hallState = 0;  //reading sensor status
 
-volatile int ticks = 0;
-volatile int revolutions = 0;
+int ticks = 0;
+int revolutions = 0;
 
-//main power pin
-byte mainPower = 32; 
-
-byte throttlePin = 10;
-Servo throttle;
- 
 String incoming = "";
 boolean completeString = false;
 
@@ -54,76 +45,39 @@ void setup()
      //enable the built in pullup resistor
      pinMode(2,INPUT_PULLUP);
      
-     //attachInterrupt(hall_effect_interrupt_num,tickhandler,FALLING);    //not sure of 3rd param
      attachInterrupt(digitalPinToInterrupt(hall_effect_pin),tickhandler,FALLING);    //not sure of 3rd param
      
      //make sure the main power is shut off
      pinMode(mainPower, OUTPUT);
      digitalWrite(mainPower, LOW);
      
-     //attach the servo to the pin
-     throttle.attach(throttlePin);
-
-     //move the servo back to 0 degrees before you turn on the main power!!!
-     throttle.write(0);
-     
-     //turn on the main power
-     digitalWrite(mainPower,HIGH);
-     
      Serial.println("start now");
-}
-void logger(String t)
-{
-     Serial.println(t);
-     //Serial1.println(t);
-}
-
-void doSomething(String s)
-{
-     String log = "receive: " + s;
-     //logger(s);
-     if (incoming == "on")
-     {
-          digitalWrite(mainPower, HIGH);
-     }
-     else if (incoming == "off")
-     {
-          digitalWrite(mainPower, LOW);
-     }
-     else if (s=="ping" || s == "PING")
-     {
-          logger("pong");
-          //Serial.println("pong");
-          //Serial.println(millis());
-     }
-     else if (s =="f")
-     {
-          //throttle.write();  //put the position here, this is the angle to move to
-          throttle.write(180);
-          logger("to 180");
-     }
-     else if (s == "s")
-     {
-          throttle.write(20);
-          logger("to 20");
-     }
-     else
-     {
-          logger(log);
-          Serial.println("we are right here");
-          //throttle.write(s.toInt());
-     }
 }
 
 void loop()
 {
      if(completeString)
      {
-          doSomething(incoming);
+
+          String log = "receive: " + incoming;
+          //logger(s);
+          if (incoming == "on")
+          {
+               digitalWrite(mainPower, HIGH);
+          }
+          else if (incoming == "off")
+          {
+               digitalWrite(mainPower, LOW);
+          }
+          else
+          {
+               Serial.println("we are right here");
+               Serial.println(log);
+          }
           completeString = false;
           incoming = "";
      }
-    
+     
 }
 
 void tickhandler()
@@ -139,6 +93,8 @@ void tickhandler()
      
      digitalWrite(ledPin, !digitalRead(ledPin) );
 }
+
+
 
 
 void serialEvent()
@@ -160,4 +116,3 @@ void serialEvent()
           }
      }
 }
-
