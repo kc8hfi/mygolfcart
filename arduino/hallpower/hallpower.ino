@@ -1,3 +1,26 @@
+#include <Servo.h>
+#include <SPI.h>
+#include <Wire.h>
+#include <math.h>
+#include <stdlib.h>
+
+/*
+ *          Change-Log 12:34am April 28th 
+ * Adam Cantrell
+ *
+ *
+ * Cleaned up the code to make the code a bit easier to read
+ *      especially the declarations for the pins and variables
+ *
+ * Noticed that the interrupt was attached to pin 2 however the
+ *      hall_effect_pin was stil set to look at pin 3Hopefully 
+ *      by fixing this so that the sensor and interrupt are on 
+ *      the same pin again will correct the problem with not 
+ *      getting any data from the sensor
+ *
+ *      
+ */
+ 
 /*
  * hall effect sensor on the front wheel
  * black - 14 orange - ground
@@ -9,64 +32,81 @@
  * 7 magnets, evenly spaced, 7.40518 inches apart
  */
 
-#define BAUD 115200
- 
  /*
+ * Are these the color codes for the throttle wiring?
+ *
  * black - orange - ground
  * blue - brown - signal
  * red - yellow - +5vdc
  */
 
-//main power pin
-byte mainPower = 32; 
+ 
+/**************DEFINITIONS**************/
+#define BAUD 115200                             //Set baud rate for the arduino serial port
+#define mainPower   32                          //Pin for Main Power relay 
+#define hall_effect_interrupt_num   0           //Pin for hall effect interrupt
+#define hall_effect_pin   2                     //Pin the hall effect sensor wire is connected to 
+#define ledPin   13                             //led pin
 
-#define hall_effect_interrupt_num 0
-byte hall_effect_pin = 3;
-//pin 2 is interrupt 0, so plug the sensor into pin 2
 
-#define ledPin 13   //led pin
+/**************VARIABLES**************/
+volatile int ticks = 0;                         //Counts the number of ticks per revolution
+volatile int revolutions = 0;                   //Counts the number of revolutions of the wheel
+String incoming = "";                           //String used to hold input from the serial port
+boolean completeString = false;                 //Boolean used in check to determine if command ends with /n
+int hallState = 0;                              //reading sensor status
 
-int hallState = 0;  //reading sensor status
+/**************OBJECTS**************/
+Servo throttle;                                 //Create object for the throttle servo. 
 
-int ticks = 0;
-int revolutions = 0;
 
-String incoming = "";
-boolean completeString = false;
+
 
 void setup()
 {
-     for(int i=1;i<=53;i++)
-     {
-          pinMode(i,OUTPUT);
-          digitalWrite(i,LOW);
-     }
-     
      // Open the serial connection,
      Serial.begin(BAUD);
+     
+     Serial.println("Beginning setup");
+     Serial.println("Setting default states to low");
+     
+     // Set the default state of all pins on the arduino to low to prevent floating 
+     // pins from causing problems with the interrupts firing when they shouldnt
+//      for(int i=1;i<=53;i++)
+//      {
+//           pinMode(i,OUTPUT);
+//           digitalWrite(i,LOW);
+//      }
+     
 
      //set the mode for the led
      pinMode(ledPin,OUTPUT);
      
-     //enable the built in pullup resistor
-     pinMode(2,INPUT_PULLUP);
      
-     attachInterrupt(digitalPinToInterrupt(hall_effect_pin),tickhandler,FALLING);    //not sure of 3rd param
+     //enable the built in pullup resistor
+     pinMode(hall_effect_pin,INPUT_PULLUP);
+     digitalWrite(hall_effect_pin,HIGH);
+     
+     
+     //3rd parameter defines what triggers the interrupt. Falling indicates that a voltage drop fires the interrupt
+     attachInterrupt(digitalPinToInterrupt(hall_effect_pin),tickhandler,FALLING);    
+     
      
      //make sure the main power is shut off
      pinMode(mainPower, OUTPUT);
      digitalWrite(mainPower, LOW);
      
-     Serial.println("start now");
+     
+     Serial.println("Arduino now ready!");
 }
 
 void loop()
 {
      if(completeString)
      {
-
           String log = "receive: " + incoming;
           //logger(s);
+          
           if (incoming == "on")
           {
                digitalWrite(mainPower, HIGH);
@@ -80,11 +120,13 @@ void loop()
                Serial.println("we are right here");
                Serial.println(log);
           }
-          completeString = false;
-          incoming = "";
+          
+          completeString = false;                           //Reset bool to false for to begin waiting for the new command.
+          incoming = "";                                    //Reset the string that holds incoming commands to empty string.
      }
-     
 }
+
+
 
 void tickhandler()
 {
@@ -97,9 +139,8 @@ void tickhandler()
      Serial.println(ticks);
      Serial.println(revolutions);
      
-     digitalWrite(ledPin, !digitalRead(ledPin) );
+     digitalWrite(ledPin, !digitalRead(ledPin) );                   //Visual inidcator that the tickhandler has fired
 }
-
 
 
 

@@ -32,7 +32,7 @@ public class readwrite
           BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
           String input = "";
           
-          String port = "/dev/ttyACM1";
+          String port = "/dev/ttyACM0";
           String consoleReaderName = "Reader";
           try 
           {
