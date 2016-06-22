@@ -1,3 +1,9 @@
+#include <Wire.h>
+#include <math.h>
+#include <stdlib.h>
+
+#define BAUD 115200
+
 /*
 BM004_Arduino_compass_tilt_compensated:  This program reads the magnetometer and
 accelermoter registers from ST Micro's LSM303DLHC.  The register values are used to generate 
@@ -19,9 +25,6 @@ see www.solutions-cubed.com for additional information.
  * front faces away from the wires
  */
 
-#include <Wire.h>
-#include <math.h>
-#include <stdlib.h>
  
 float Heading;
 float Pitch;
@@ -41,8 +44,6 @@ float Mag_maxx;
 float Mag_maxy;
 float Mag_maxz;
     
-
-
 //string to hold the incoming command
 String inputString = "";
 boolean stringComplete = false;
@@ -50,11 +51,8 @@ boolean stringComplete = false;
 //start the time,
 unsigned long thetime = 0;
 
-
 //keep track if we got a response or not
 int noResponse = 0;
-
-
 
 void logger(String t)
 {
@@ -62,21 +60,19 @@ void logger(String t)
      //Serial1.println(t);
 }//end logger
 
-    
 /*  
 Send register address and the byte value you want to write the accelerometer and 
 loads the destination register with the value you send
 */
 void WriteAccRegister(byte data, byte regaddress)
 {
-    
-    Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20
-    Wire.write(regaddress);
-    Wire.write(data);  
-    Serial.println("before endtrans");
-    Serial.println("broke right before endtransmission");
-    Wire.endTransmission();     
-    Serial.println("good now");
+     Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20
+     Wire.write(regaddress);
+     Wire.write(data);  
+     Serial.println("before endtrans");
+     Serial.println("broke right before endtransmission");
+     Wire.endTransmission();     
+     Serial.println("good now");
 }
 
 /*  
@@ -86,22 +82,21 @@ for the accelerometer register's contents
 byte ReadAccRegister(byte regaddress)
 {
      //0x29
-    byte data;
-    
-    
-    Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20  
-    Wire.write(regaddress);
-    Wire.endTransmission();
-  
-    //delayMicroseconds(100);
+     byte data;
 
-    Wire.requestFrom(0x19,1);   // Use accelerometer address for regs >=0x20
-    data = Wire.read();
-    Wire.endTransmission();   
+     Wire.beginTransmission(0x19);   // Use accelerometer address for regs >=0x20  
+     Wire.write(regaddress);
+     Wire.endTransmission();
 
-    //delayMicroseconds(100);
+     //delayMicroseconds(100);
 
-    return data;  
+     Wire.requestFrom(0x19,1);   // Use accelerometer address for regs >=0x20
+     data = Wire.read();
+     Wire.endTransmission();   
+
+     //delayMicroseconds(100);
+
+     return data;  
 }  
 
 
@@ -111,12 +106,12 @@ loads the destination register with the value you send
 */
 void WriteMagRegister(byte data, byte regaddress)
 {
-    Wire.beginTransmission(0x1E);   // Else use magnetometer address
-    Wire.write(regaddress);
-    Wire.write(data);  
-    Wire.endTransmission();     
+     Wire.beginTransmission(0x1E);   // Else use magnetometer address
+     Wire.write(regaddress);
+     Wire.write(data);  
+     Wire.endTransmission();     
 
-    //delayMicroseconds(100);
+     //delayMicroseconds(100);
 }
 
 /*  
@@ -125,35 +120,35 @@ for the magnetometer register's contents
 */
 byte ReadMagRegister(byte regaddress)
 {
-    byte data;
-    Wire.beginTransmission(0x1E);   // Else use magnetometer address  
-    Wire.write(regaddress);
-    Wire.endTransmission();
-  
-    //delayMicroseconds(100);
-    
-    Wire.requestFrom(0x1E,1);   // Else use magnetometer address
-    data = Wire.read();
-    Wire.endTransmission();   
+     byte data;
+     Wire.beginTransmission(0x1E);   // Else use magnetometer address  
+     Wire.write(regaddress);
+     Wire.endTransmission();
 
-    //delayMicroseconds(100);
+     //delayMicroseconds(100);
 
-    return data;  
+     Wire.requestFrom(0x1E,1);   // Else use magnetometer address
+     data = Wire.read();
+     Wire.endTransmission();   
+
+     //delayMicroseconds(100);
+
+     return data;  
 }  
 
 void init_Compass(void)
 {
-    Serial.println("b WriteAccRegister");
-    WriteAccRegister(0x67,0x20);  // Enable accelerometer, 200Hz data output
-    Serial.println("a WriteAccRegister");
+     Serial.println("b WriteAccRegister");
+     WriteAccRegister(0x67,0x20);  // Enable accelerometer, 200Hz data output
+     Serial.println("a WriteAccRegister");
 
 
-    WriteMagRegister(0x9c,0x00);  // Enable temperature sensor, 220Hz data output
-    Serial.println("firstwrite mag");
-    WriteMagRegister(0x20,0x01);  // set gain to +/-1.3Gauss
-    Serial.println("second write mag");
-    WriteMagRegister(0x00,0x02);  // Enable magnetometer constant conversions
-    Serial.println("third writemag");
+     WriteMagRegister(0x9c,0x00);  // Enable temperature sensor, 220Hz data output
+     Serial.println("firstwrite mag");
+     WriteMagRegister(0x20,0x01);  // set gain to +/-1.3Gauss
+     Serial.println("second write mag");
+     WriteMagRegister(0x00,0x02);  // Enable magnetometer constant conversions
+     Serial.println("third writemag");
 }
 
 /*
@@ -162,20 +157,18 @@ serial monitor.
 */
 void get_Accelerometer(void)
 {
+     // accelerometer values
+     byte xh = ReadAccRegister(0x29);
+     byte xl = ReadAccRegister(0x28);
+     byte yh = ReadAccRegister(0x2B);
+     byte yl = ReadAccRegister(0x2A);
+     byte zh = ReadAccRegister(0x2D);
+     byte zl = ReadAccRegister(0x2C);
 
-  // accelerometer values
-  byte xh = ReadAccRegister(0x29);
-  byte xl = ReadAccRegister(0x28);
-  byte yh = ReadAccRegister(0x2B);
-  byte yl = ReadAccRegister(0x2A);
-  byte zh = ReadAccRegister(0x2D);
-  byte zl = ReadAccRegister(0x2C);
-  
-  // need to convert the register contents into a righ-justified 16 bit value
-  Accx = (xh<<8|xl); 
-  Accy = (yh<<8|yl); 
-  Accz = (zh<<8|zl); 
-
+     // need to convert the register contents into a righ-justified 16 bit value
+     Accx = (xh<<8|xl); 
+     Accy = (yh<<8|yl); 
+     Accz = (zh<<8|zl); 
 }  
 
 /*
@@ -184,18 +177,18 @@ serial monitor.
 */
 void get_Magnetometer(void)
 {  
-  // magnetometer values
-  byte xh = ReadMagRegister(0x03);
-  byte xl = ReadMagRegister(0x04);
-  byte yh = ReadMagRegister(0x07);
-  byte yl = ReadMagRegister(0x08);
-  byte zh = ReadMagRegister(0x05);
-  byte zl = ReadMagRegister(0x06);
-  
-  // convert registers to ints
-  Magx = (xh<<8|xl); 
-  Magy = (yh<<8|yl); 
-  Magz = (zh<<8|zl); 
+     // magnetometer values
+     byte xh = ReadMagRegister(0x03);
+     byte xl = ReadMagRegister(0x04);
+     byte yh = ReadMagRegister(0x07);
+     byte yl = ReadMagRegister(0x08);
+     byte zh = ReadMagRegister(0x05);
+     byte zl = ReadMagRegister(0x06);
+
+     // convert registers to ints
+     Magx = (xh<<8|xl); 
+     Magy = (yh<<8|yl); 
+     Magz = (zh<<8|zl); 
 }  
 
 /*
@@ -219,34 +212,33 @@ void get_TiltHeading(void)
      Mag_maxx = 567;
      Mag_maxy = 442;
      Mag_maxz = 574;
-     
   
-  // use calibration values to shift and scale magnetometer measurements
-  Magx = (Magx-Mag_minx)/(Mag_maxx-Mag_minx)*2-1;  
-  Magy = (Magy-Mag_miny)/(Mag_maxy-Mag_miny)*2-1;  
-  Magz = (Magz-Mag_minz)/(Mag_maxz-Mag_minz)*2-1;  
+     // use calibration values to shift and scale magnetometer measurements
+     Magx = (Magx-Mag_minx)/(Mag_maxx-Mag_minx)*2-1;  
+     Magy = (Magy-Mag_miny)/(Mag_maxy-Mag_miny)*2-1;  
+     Magz = (Magz-Mag_minz)/(Mag_maxz-Mag_minz)*2-1;  
 
-  // Normalize acceleration measurements so they range from 0 to 1
-  float accxnorm = Accx/sqrt(Accx*Accx+Accy*Accy+Accz*Accz);
-  float accynorm = Accy/sqrt(Accx*Accx+Accy*Accy+Accz*Accz);
-  
-  // calculate pitch and roll
-  Pitch = asin(-accxnorm);
-  Roll = asin(accynorm/cos(Pitch));
+     // Normalize acceleration measurements so they range from 0 to 1
+     float accxnorm = Accx/sqrt(Accx*Accx+Accy*Accy+Accz*Accz);
+     float accynorm = Accy/sqrt(Accx*Accx+Accy*Accy+Accz*Accz);
 
-  // tilt compensated magnetic sensor measurements
-  float magxcomp = Magx*cos(Pitch)+Magz*sin(Pitch);
-  float magycomp = Magx*sin(Roll)*sin(Pitch)+Magy*cos(Roll)-Magz*sin(Roll)*cos(Pitch);
-  
-  // arctangent of y/x converted to degrees
-  Heading = 180*atan2(magycomp,magxcomp)/PI;
+     // calculate pitch and roll
+     Pitch = asin(-accxnorm);
+     Roll = asin(accynorm/cos(Pitch));
 
-  if (Heading < 0)
-      Heading +=360;
+     // tilt compensated magnetic sensor measurements
+     float magxcomp = Magx*cos(Pitch)+Magz*sin(Pitch);
+     float magycomp = Magx*sin(Roll)*sin(Pitch)+Magy*cos(Roll)-Magz*sin(Roll)*cos(Pitch);
 
-    //Serial.print("Heading=");
-    //Serial.println(Heading);    
-  }  
+     // arctangent of y/x converted to degrees
+     Heading = 180*atan2(magycomp,magxcomp)/PI;
+
+     if (Heading < 0)
+          Heading +=360;
+
+     //Serial.print("Heading=");
+     //Serial.println(Heading);    
+}  
 
 String fixFloat(float d)
 {
@@ -258,8 +250,8 @@ String fixFloat(float d)
 }
   
 /*
- * ping - keepalive 
- * heading - heading
+ * status - prints out the compass heading 
+ * ping - prints out pong
  */
   
 void doSomething(String s)
@@ -267,10 +259,6 @@ void doSomething(String s)
      thetime = millis();
      String log = "receive: " + s + " - ";
      log = "";
-     
-     //remove this line later
-     Serial.println(s);
-     
      
      if (s == "status")
      {
@@ -298,19 +286,15 @@ void doSomething(String s)
 void setup() 
 {
      // Open the serial connection,
-     Serial.begin(115200);
+     Serial.begin(BAUD);
      //Serial1.begin(115200);
 
-     //log ready message
-     
      Serial.println("arduino ready");
 
      Wire.begin();
      Serial.println("after wire.begin");
      init_Compass();
      Serial.println("after init compass");
-     
- 
 }
   
 void loop() 
@@ -318,8 +302,6 @@ void loop()
     get_Accelerometer();
     get_Magnetometer();
     get_TiltHeading();
-    
-    //delay(100);
     
      if (stringComplete)
      {
@@ -334,7 +316,6 @@ void loop()
           //Serial.println("stop everything!");
           //delay(1000);
      }
-     
 }
 
 /*
@@ -351,4 +332,3 @@ void serialEvent()
                inputString += inChar;     
      }
 }//end serialEvent
-

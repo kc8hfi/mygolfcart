@@ -4,6 +4,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define BAUD 115200
+
 /*
  * hall effect sensor on the front wheel
  * black - 14 orange - ground
@@ -15,8 +17,6 @@
  * 7 magnets, evenly spaced, 7.40518 inches apart
  */
 
-#define BAUD 115200
- 
  /*
  * black - orange - ground
  * blue - brown - signal
@@ -37,7 +37,7 @@ volatile int revolutions = 0;
 //main power pin
 byte mainPower = 32; 
 
-byte throttlePin = 10;
+byte throttlePin = 8;
 Servo throttle;
  
 String incoming = "";
@@ -65,7 +65,7 @@ void setup()
      throttle.attach(throttlePin);
 
      //move the servo back to 0 degrees before you turn on the main power!!!
-     throttle.write(0);
+     throttle.write(180);
      
      //turn on the main power
      digitalWrite(mainPower,HIGH);
@@ -99,19 +99,19 @@ void doSomething(String s)
      else if (s =="f")
      {
           //throttle.write();  //put the position here, this is the angle to move to
-          throttle.write(180);
-          logger("to 180");
+          throttle.write(0);
+          logger("to 0");
      }
      else if (s == "s")
      {
-          throttle.write(20);
-          logger("to 20");
+          throttle.write(180);
+          logger("to 180");
      }
      else
      {
           logger(log);
           Serial.println("we are right here");
-          //throttle.write(s.toInt());
+          throttle.write(s.toInt());
      }
 }
 
