@@ -7,7 +7,7 @@
 #define BAUD 115200
 
 //main power pin
-#define MAIN_POWER 32
+#define MAIN_POWER 30
 
 //throttle pin,  for the servo
 #define THROTTLE 8
@@ -99,13 +99,13 @@ void doSomething(String s)
           //Serial.println("pong");
           //Serial.println(millis());
      }
-     else if (s =="f")
+     else if (s =="s")
      {
           //throttle.write();  //put the position here, this is the angle to move to
           throttle.write(180);
           logger("to 180");
      }
-     else if (s == "s")
+     else if (s == "f")
      {
           throttle.write(20);
           logger("to 20");

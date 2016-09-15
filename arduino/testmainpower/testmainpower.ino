@@ -1,6 +1,6 @@
 #define BAUD 115200
 
-#define MAIN_POWER_RELAY 32
+#define MAIN_POWER_RELAY 30
 
 String inputString = "";
 boolean stringComplete = false;
