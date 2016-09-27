@@ -1,7 +1,8 @@
 #define BAUD 115200
 
 #define MAIN_POWER_RELAY 32
-#define FWD_REV_RELAY 34
+#define FWD_REV_RELAY 38
+#define FWD_REV_TOGGLE 39
 
 String inputString = "";
 boolean stringComplete = false;
@@ -17,7 +18,9 @@ void setup()
 
      //set up the fwd/rev relay and set it to low
      pinMode(FWD_REV_RELAY,OUTPUT);
-     digitalWrite(FWD_REV_RELAY,LOW);
+     digitalWrite(FWD_REV_RELAY,HIGH);
+     pinMode(FWD_REV_TOGGLE,OUTPUT);
+     pinMode(FWD_REV_TOGGLE,LOW);
      
      Serial.println("start now");
 }
@@ -42,12 +45,12 @@ void loop()
           else if(inputString == "fwd" || inputString == "FWD")
           {
                Serial.println(inputString);
-               digitalWrite(FWD_REV_RELAY,HIGH);
+               digitalWrite(FWD_REV_TOGGLE,HIGH);
           }
           else if(inputString == "rev" || inputString == "REV")
           {
                Serial.println(inputString);
-               digitalWrite(FWD_REV_RELAY,LOW);
+               digitalWrite(FWD_REV_TOGGLE,LOW);
           }
           inputString = "";
           stringComplete = false;

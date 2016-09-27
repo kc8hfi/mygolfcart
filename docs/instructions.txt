@@ -19,3 +19,16 @@ plug usb cable from the arduino into the pi
 plug the network cable in
 
 
+2016-07-08
+The cart is now stuck in reverse!
+swapped out the fwd/rev selector switch, no change
+
+determined that the controller is bad,swapped the black and white
+wires around on top of the controller.  these go to the motor and now
+the cart will go forward only!
+the buzzer still beeps, needs to be unplugged for right now
+
+2016-09-01
+unhooked the buzzer
+left the black and white wires switched so the cart will at least go forward
+

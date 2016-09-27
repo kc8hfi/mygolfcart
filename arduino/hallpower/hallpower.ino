@@ -43,7 +43,7 @@
  
 /**************DEFINITIONS**************/
 #define BAUD 115200                             //Set baud rate for the arduino serial port
-#define mainPower   32                          //Pin for Main Power relay 
+#define mainPower   30                          //Pin for Main Power relay 
 #define hall_effect_interrupt_num   0           //Pin for hall effect interrupt
 #define hall_effect_pin   2                     //Pin the hall effect sensor wire is connected to 
 #define ledPin   13                             //led pin

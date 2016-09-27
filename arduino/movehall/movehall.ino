@@ -35,7 +35,7 @@ volatile int ticks = 0;
 volatile int revolutions = 0;
 
 //main power pin
-byte mainPower = 32; 
+byte mainPower = 30; 
 
 byte throttlePin = 8;
 Servo throttle;

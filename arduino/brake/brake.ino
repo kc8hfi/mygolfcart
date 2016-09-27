@@ -7,9 +7,9 @@
 
 #define BAUD 115200
 
-#define MAIN_POWER_RELAY 32
+#define MAIN_POWER_RELAY 30
 
-#define BRAKE_ON_PIN  34   //pin 2
+#define BRAKE_ON_PIN  32   //pin 2
 #define BRAKE_OFF_PIN 35  //pin 3
 #define BRAKE_PIN   33
 

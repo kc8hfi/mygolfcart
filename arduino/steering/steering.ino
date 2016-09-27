@@ -3,7 +3,7 @@
 #define BAUD 115200
 
 //main power relay pin
-byte mainPower = 32; 
+byte mainPower = 30; 
  
 String incoming = "";
 boolean completeString = false;
