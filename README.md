@@ -22,3 +22,14 @@ perl - all the perl scripts
      packagetest.pl - script to test the packages
      readgps.pl - read the coords from the gps
      startprogram.pl - this is the main program!
+
+
+perl stuff
+need to have installed
+perl-Future-0.33
+perl-IO-Termios-0.05
+perl-IO-Async-0.70
+perl-Moose
+perl-Text-CSV
+perl-Data-Dumper
+
