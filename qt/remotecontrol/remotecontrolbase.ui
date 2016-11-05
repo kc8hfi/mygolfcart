@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RemoteControlBase</class>
+ <widget class="QMainWindow" name="RemoteControlBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>544</width>
+    <height>385</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>211</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Vehicle Controls</string>
+    </property>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>184</width>
+       <height>202</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="1">
+       <widget class="QToolButton" name="forwardButton">
+        <property name="text">
+         <string>W</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources/icons.qrc">
+          <normaloff>:/vehicleIcons/up.png</normaloff>:/vehicleIcons/up.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QToolButton" name="leftButton">
+        <property name="text">
+         <string>A</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources/icons.qrc">
+          <normaloff>:/vehicleIcons/left.png</normaloff>:/vehicleIcons/left.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="2">
+       <widget class="QToolButton" name="rightButton">
+        <property name="text">
+         <string>D</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources/icons.qrc">
+          <normaloff>:/vehicleIcons/right.png</normaloff>:/vehicleIcons/right.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="1">
+       <widget class="QToolButton" name="reverseButton">
+        <property name="text">
+         <string>S</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources/icons.qrc">
+          <normaloff>:/vehicleIcons/down.png</normaloff>:/vehicleIcons/down.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>20</y>
+      <width>221</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Turret Controls</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>184</width>
+       <height>232</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <spacer name="horizontalSpacer_9">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="1">
+       <widget class="QToolButton" name="turretUpButton">
+        <property name="text">
+         <string>I</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources/icons.qrc">
+          <normaloff>:/vehicleIcons/up_turret.png</normaloff>:/vehicleIcons/up_turret.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <spacer name="horizontalSpacer_10">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QToolButton" name="turretLeftButton">
+        <property name="text">
+         <string>J</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources/icons.qrc">
+          <normaloff>:/vehicleIcons/left_turret.png</normaloff>:/vehicleIcons/left_turret.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <spacer name="horizontalSpacer_8">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="2">
+       <widget class="QToolButton" name="turretRightButton">
+        <property name="text">
+         <string>L</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources/icons.qrc">
+          <normaloff>:/vehicleIcons/right_turret.png</normaloff>:/vehicleIcons/right_turret.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <spacer name="horizontalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="1">
+       <widget class="QToolButton" name="turretDownButton">
+        <property name="text">
+         <string>K</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources/icons.qrc">
+          <normaloff>:/vehicleIcons/down_turret.png</normaloff>:/vehicleIcons/down_turret.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <spacer name="horizontalSpacer_7">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>58</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="3" column="0" colspan="3">
+       <widget class="QPushButton" name="fireButton">
+        <property name="text">
+         <string>FIRE (Enter)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>544</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout_Remote_Control"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="minimumSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="actionConnect"/>
+   <addaction name="actionDisconnect"/>
+  </widget>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="text">
+    <string>Connect</string>
+   </property>
+  </action>
+  <action name="actionDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="actionAbout_Remote_Control">
+   <property name="text">
+    <string>About Remote Control</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="resources/icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>forwardButton</sender>
+   <signal>pressed()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>start_forward()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>forwardButton</sender>
+   <signal>released()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>stop_forward()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>leftButton</sender>
+   <signal>pressed()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>start_left()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>40</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>leftButton</sender>
+   <signal>released()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>stop_left()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>40</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>reverseButton</sender>
+   <signal>pressed()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>start_reverse()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>225</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>reverseButton</sender>
+   <signal>released()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>stop_reverse()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>225</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rightButton</sender>
+   <signal>pressed()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>start_right()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rightButton</sender>
+   <signal>released()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>stop_right()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fireButton</sender>
+   <signal>pressed()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>start_fire()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>330</x>
+     <y>290</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fireButton</sender>
+   <signal>released()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>stop_fire()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>330</x>
+     <y>290</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>turretDownButton</sender>
+   <signal>pressed()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>start_turret_down()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>330</x>
+     <y>245</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>turretDownButton</sender>
+   <signal>released()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>stop_turret_down()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>330</x>
+     <y>245</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>turretLeftButton</sender>
+   <signal>pressed()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>start_turret_left()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>184</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>turretLeftButton</sender>
+   <signal>released()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>stop_turret_left()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>184</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>turretRightButton</sender>
+   <signal>pressed()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>start_turret_right()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>392</x>
+     <y>184</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>turretRightButton</sender>
+   <signal>released()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>stop_turret_right()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>392</x>
+     <y>184</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>turretUpButton</sender>
+   <signal>pressed()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>start_turret_up()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>330</x>
+     <y>123</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>turretUpButton</sender>
+   <signal>released()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>stop_turret_up()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>330</x>
+     <y>123</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionConnect</sender>
+   <signal>triggered()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>serverConnect()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisconnect</sender>
+   <signal>triggered()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>serverDisconnect()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout_Remote_Control</sender>
+   <signal>triggered()</signal>
+   <receiver>RemoteControlBase</receiver>
+   <slot>about()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>serverConnect()</slot>
+  <slot>start_reverse()</slot>
+  <slot>stop_reverse()</slot>
+  <slot>start_forward()</slot>
+  <slot>stop_forward()</slot>
+  <slot>start_left()</slot>
+  <slot>stop_left()</slot>
+  <slot>start_right()</slot>
+  <slot>stop_right()</slot>
+  <slot>start_turret_up()</slot>
+  <slot>stop_turret_up()</slot>
+  <slot>start_turret_down()</slot>
+  <slot>stop_turret_down()</slot>
+  <slot>start_turret_left()</slot>
+  <slot>stop_turret_left()</slot>
+  <slot>start_turret_right()</slot>
+  <slot>stop_turret_right()</slot>
+  <slot>start_fire()</slot>
+  <slot>stop_fire()</slot>
+  <slot>serverDisconnect()</slot>
+  <slot>about()</slot>
+ </slots>
+</ui>

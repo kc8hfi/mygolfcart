@@ -1,0 +1,10 @@
+The following things need to be installed BEFORE you can compile
+
+1.  qt-devel
+2.  SDL-devel
+
+To compile on fedora:
+1.  qmake-qt4
+2.  make
+
+

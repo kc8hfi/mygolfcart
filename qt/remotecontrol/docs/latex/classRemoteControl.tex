@@ -1,0 +1,332 @@
+\hypertarget{classRemoteControl}{
+\section{RemoteControl Class Reference}
+\label{classRemoteControl}\index{RemoteControl@{RemoteControl}}
+}
+
+
+{\ttfamily \#include $<$remotecontrol.h$>$}
+
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classRemoteControl_a234b150f3acba1d58304808cc491b5ae}{displayError} (QAbstractSocket::SocketError)
+\item 
+void \hyperlink{classRemoteControl_a7ef0102f355b064763f24866ad6835a9}{serverConnect} ()
+\item 
+void \hyperlink{classRemoteControl_ab51924404f873141d986d609bdc8a879}{start\_\-forward} ()
+\item 
+void \hyperlink{classRemoteControl_a55857c188244a29baf0ff40ad5df3be2}{stop\_\-forward} ()
+\item 
+void \hyperlink{classRemoteControl_a148de9c23fb47748ebfd00f7b282974c}{stop\_\-reverse} ()
+\item 
+void \hyperlink{classRemoteControl_ae949b1a1afc3e9773583f317b57b25ba}{start\_\-reverse} ()
+\item 
+void \hyperlink{classRemoteControl_adea74e96812a0662d0a5eeefb62bd1d3}{start\_\-left} ()
+\item 
+void \hyperlink{classRemoteControl_a02e86cc3fface3d3ea33d62a7df30acb}{stop\_\-left} ()
+\item 
+void \hyperlink{classRemoteControl_ae9ad61b2c6c8bba551fcb26064f64a6b}{start\_\-right} ()
+\item 
+void \hyperlink{classRemoteControl_af7e0d46e7824d3e6483b55d887f23063}{stop\_\-right} ()
+\item 
+void \hyperlink{classRemoteControl_ac173cecf6ee35e4b43794ee4cc4c673d}{start\_\-turret\_\-left} ()
+\item 
+void \hyperlink{classRemoteControl_afeb9cfe8a1c8e3dc1a89c039378417a4}{stop\_\-turret\_\-left} ()
+\item 
+void \hyperlink{classRemoteControl_a0d6571c7485a67ea19e0503cbe91906e}{start\_\-turret\_\-right} ()
+\item 
+void \hyperlink{classRemoteControl_a856d98499b4b6b4d9374b6bd43f9bc0b}{stop\_\-turret\_\-right} ()
+\item 
+void \hyperlink{classRemoteControl_a1a1aa0c3db04fe4abaac62ce9daf81df}{start\_\-turret\_\-up} ()
+\item 
+void \hyperlink{classRemoteControl_a79edbfa1fa9b764ed15d659c7589b4bb}{stop\_\-turret\_\-up} ()
+\item 
+void \hyperlink{classRemoteControl_a1c4e8e2e9ba3082a81b005f6465e5709}{start\_\-turret\_\-down} ()
+\item 
+void \hyperlink{classRemoteControl_a036332c3c4e0050dda3b0d10db16e110}{stop\_\-turret\_\-down} ()
+\item 
+void \hyperlink{classRemoteControl_a26e5966e5fdc99f34e3863fd61547d5b}{start\_\-fire} ()
+\item 
+void \hyperlink{classRemoteControl_ac5410c44cd89eea69a7cbc942dcf07f1}{stop\_\-fire} ()
+\item 
+void \hyperlink{classRemoteControl_a8091590758f3eac40cf8f15e2adc0d01}{axisEvent} (int axis, int value)
+\item 
+void \hyperlink{classRemoteControl_aa1c43e477e1ae77b539913fa42ccc7a0}{buttonPress} (int button)
+\item 
+void \hyperlink{classRemoteControl_ad1f1fc95aa2f537960524196f2b32b88}{buttonRelease} (int button)
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classRemoteControl_a882e354d8b4d5b525f2c89e0306fa0ce}{RemoteControl} (QMainWindow $\ast$parent=0)
+\item 
+void \hyperlink{classRemoteControl_af6ce8ad2fcc3e190df87ede1db78e7ec}{keyPressEvent} (QKeyEvent $\ast$event)
+\item 
+void \hyperlink{classRemoteControl_a5aa7e982832af00b831401c0dc82fd25}{keyReleaseEvent} (QKeyEvent $\ast$event)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classRemoteControl}{RemoteControl} class. remote control gui interface for the powerwheels vehicle \begin{DoxyAuthor}{Author}
+Charles Amey 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.1 
+\end{DoxyVersion}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classRemoteControl_a882e354d8b4d5b525f2c89e0306fa0ce}{
+\index{RemoteControl@{RemoteControl}!RemoteControl@{RemoteControl}}
+\index{RemoteControl@{RemoteControl}!RemoteControl@{RemoteControl}}
+\subsubsection[{RemoteControl}]{\setlength{\rightskip}{0pt plus 5cm}RemoteControl::RemoteControl (
+\begin{DoxyParamCaption}
+\item[{QMainWindow $\ast$}]{ parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}
+\label{classRemoteControl_a882e354d8b4d5b525f2c89e0306fa0ce}
+create a new \hyperlink{classRemoteControl}{RemoteControl} object
+
+set up a new \hyperlink{classRemoteControl}{RemoteControl} object 
+
+\subsection{Member Function Documentation}
+\hypertarget{classRemoteControl_a8091590758f3eac40cf8f15e2adc0d01}{
+\index{RemoteControl@{RemoteControl}!axisEvent@{axisEvent}}
+\index{axisEvent@{axisEvent}!RemoteControl@{RemoteControl}}
+\subsubsection[{axisEvent}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::axisEvent (
+\begin{DoxyParamCaption}
+\item[{int}]{ axis, }
+\item[{int}]{ value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a8091590758f3eac40cf8f15e2adc0d01}
+event handler for the d-\/pad on the joystick
+
+handles the d-\/pad on the joystick \hypertarget{classRemoteControl_aa1c43e477e1ae77b539913fa42ccc7a0}{
+\index{RemoteControl@{RemoteControl}!buttonPress@{buttonPress}}
+\index{buttonPress@{buttonPress}!RemoteControl@{RemoteControl}}
+\subsubsection[{buttonPress}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::buttonPress (
+\begin{DoxyParamCaption}
+\item[{int}]{ button}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_aa1c43e477e1ae77b539913fa42ccc7a0}
+event handler for a joystick button press
+
+red = 0 yellow = 1 green = 2 blue = 3 l1 = 4 r1 = 5 l2 = 6 r2 = 7 select = 8 start = 9 \hypertarget{classRemoteControl_ad1f1fc95aa2f537960524196f2b32b88}{
+\index{RemoteControl@{RemoteControl}!buttonRelease@{buttonRelease}}
+\index{buttonRelease@{buttonRelease}!RemoteControl@{RemoteControl}}
+\subsubsection[{buttonRelease}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::buttonRelease (
+\begin{DoxyParamCaption}
+\item[{int}]{ button}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_ad1f1fc95aa2f537960524196f2b32b88}
+event handler for a joystick button releas \hypertarget{classRemoteControl_a234b150f3acba1d58304808cc491b5ae}{
+\index{RemoteControl@{RemoteControl}!displayError@{displayError}}
+\index{displayError@{displayError}!RemoteControl@{RemoteControl}}
+\subsubsection[{displayError}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::displayError (
+\begin{DoxyParamCaption}
+\item[{QAbstractSocket::SocketError}]{ error}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a234b150f3acba1d58304808cc491b5ae}
+display any errors that may occur when connecting to the server
+
+displays the error message if a connection could not be made \hypertarget{classRemoteControl_af6ce8ad2fcc3e190df87ede1db78e7ec}{
+\index{RemoteControl@{RemoteControl}!keyPressEvent@{keyPressEvent}}
+\index{keyPressEvent@{keyPressEvent}!RemoteControl@{RemoteControl}}
+\subsubsection[{keyPressEvent}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::keyPressEvent (
+\begin{DoxyParamCaption}
+\item[{QKeyEvent $\ast$}]{ event}
+\end{DoxyParamCaption}
+)}}
+\label{classRemoteControl_af6ce8ad2fcc3e190df87ede1db78e7ec}
+keyboard key pressed event handler \hypertarget{classRemoteControl_a5aa7e982832af00b831401c0dc82fd25}{
+\index{RemoteControl@{RemoteControl}!keyReleaseEvent@{keyReleaseEvent}}
+\index{keyReleaseEvent@{keyReleaseEvent}!RemoteControl@{RemoteControl}}
+\subsubsection[{keyReleaseEvent}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::keyReleaseEvent (
+\begin{DoxyParamCaption}
+\item[{QKeyEvent $\ast$}]{ event}
+\end{DoxyParamCaption}
+)}}
+\label{classRemoteControl_a5aa7e982832af00b831401c0dc82fd25}
+keyboard key released event handler \hypertarget{classRemoteControl_a7ef0102f355b064763f24866ad6835a9}{
+\index{RemoteControl@{RemoteControl}!serverConnect@{serverConnect}}
+\index{serverConnect@{serverConnect}!RemoteControl@{RemoteControl}}
+\subsubsection[{serverConnect}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::serverConnect (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a7ef0102f355b064763f24866ad6835a9}
+displays a dialog box asking for the ip and port of the server, then connects to the server
+
+Opens a dialog box, gets the ip address and port of the server. Makes a connection to the server, display an error message if the connection could not be made \hypertarget{classRemoteControl_a26e5966e5fdc99f34e3863fd61547d5b}{
+\index{RemoteControl@{RemoteControl}!start\_\-fire@{start\_\-fire}}
+\index{start\_\-fire@{start\_\-fire}!RemoteControl@{RemoteControl}}
+\subsubsection[{start\_\-fire}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::start\_\-fire (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a26e5966e5fdc99f34e3863fd61547d5b}
+send signal to start firing the gun \hypertarget{classRemoteControl_ab51924404f873141d986d609bdc8a879}{
+\index{RemoteControl@{RemoteControl}!start\_\-forward@{start\_\-forward}}
+\index{start\_\-forward@{start\_\-forward}!RemoteControl@{RemoteControl}}
+\subsubsection[{start\_\-forward}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::start\_\-forward (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_ab51924404f873141d986d609bdc8a879}
+sends the signal to the server to tell the vehicle to start moving forward \hypertarget{classRemoteControl_adea74e96812a0662d0a5eeefb62bd1d3}{
+\index{RemoteControl@{RemoteControl}!start\_\-left@{start\_\-left}}
+\index{start\_\-left@{start\_\-left}!RemoteControl@{RemoteControl}}
+\subsubsection[{start\_\-left}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::start\_\-left (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_adea74e96812a0662d0a5eeefb62bd1d3}
+sends the signal to the server to tell the vehicle to start turning left \hypertarget{classRemoteControl_ae949b1a1afc3e9773583f317b57b25ba}{
+\index{RemoteControl@{RemoteControl}!start\_\-reverse@{start\_\-reverse}}
+\index{start\_\-reverse@{start\_\-reverse}!RemoteControl@{RemoteControl}}
+\subsubsection[{start\_\-reverse}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::start\_\-reverse (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_ae949b1a1afc3e9773583f317b57b25ba}
+sends the signal to the server to tell the vehicle to stop moving backward \hypertarget{classRemoteControl_ae9ad61b2c6c8bba551fcb26064f64a6b}{
+\index{RemoteControl@{RemoteControl}!start\_\-right@{start\_\-right}}
+\index{start\_\-right@{start\_\-right}!RemoteControl@{RemoteControl}}
+\subsubsection[{start\_\-right}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::start\_\-right (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_ae9ad61b2c6c8bba551fcb26064f64a6b}
+send the signal to the server to tell the vehicle to start turning right \hypertarget{classRemoteControl_a1c4e8e2e9ba3082a81b005f6465e5709}{
+\index{RemoteControl@{RemoteControl}!start\_\-turret\_\-down@{start\_\-turret\_\-down}}
+\index{start\_\-turret\_\-down@{start\_\-turret\_\-down}!RemoteControl@{RemoteControl}}
+\subsubsection[{start\_\-turret\_\-down}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::start\_\-turret\_\-down (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a1c4e8e2e9ba3082a81b005f6465e5709}
+send signal to server to tell the turret to start down \hypertarget{classRemoteControl_ac173cecf6ee35e4b43794ee4cc4c673d}{
+\index{RemoteControl@{RemoteControl}!start\_\-turret\_\-left@{start\_\-turret\_\-left}}
+\index{start\_\-turret\_\-left@{start\_\-turret\_\-left}!RemoteControl@{RemoteControl}}
+\subsubsection[{start\_\-turret\_\-left}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::start\_\-turret\_\-left (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_ac173cecf6ee35e4b43794ee4cc4c673d}
+send signal to server to tell turret to start left \hypertarget{classRemoteControl_a0d6571c7485a67ea19e0503cbe91906e}{
+\index{RemoteControl@{RemoteControl}!start\_\-turret\_\-right@{start\_\-turret\_\-right}}
+\index{start\_\-turret\_\-right@{start\_\-turret\_\-right}!RemoteControl@{RemoteControl}}
+\subsubsection[{start\_\-turret\_\-right}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::start\_\-turret\_\-right (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a0d6571c7485a67ea19e0503cbe91906e}
+send signal to server to tell the turret to start right \hypertarget{classRemoteControl_a1a1aa0c3db04fe4abaac62ce9daf81df}{
+\index{RemoteControl@{RemoteControl}!start\_\-turret\_\-up@{start\_\-turret\_\-up}}
+\index{start\_\-turret\_\-up@{start\_\-turret\_\-up}!RemoteControl@{RemoteControl}}
+\subsubsection[{start\_\-turret\_\-up}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::start\_\-turret\_\-up (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a1a1aa0c3db04fe4abaac62ce9daf81df}
+send signal to server to tell the turret to start up \hypertarget{classRemoteControl_ac5410c44cd89eea69a7cbc942dcf07f1}{
+\index{RemoteControl@{RemoteControl}!stop\_\-fire@{stop\_\-fire}}
+\index{stop\_\-fire@{stop\_\-fire}!RemoteControl@{RemoteControl}}
+\subsubsection[{stop\_\-fire}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::stop\_\-fire (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_ac5410c44cd89eea69a7cbc942dcf07f1}
+send signal to stop firing the gun \hypertarget{classRemoteControl_a55857c188244a29baf0ff40ad5df3be2}{
+\index{RemoteControl@{RemoteControl}!stop\_\-forward@{stop\_\-forward}}
+\index{stop\_\-forward@{stop\_\-forward}!RemoteControl@{RemoteControl}}
+\subsubsection[{stop\_\-forward}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::stop\_\-forward (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a55857c188244a29baf0ff40ad5df3be2}
+sends the signal to the server to tell the vehicle to stop moving forward \hypertarget{classRemoteControl_a02e86cc3fface3d3ea33d62a7df30acb}{
+\index{RemoteControl@{RemoteControl}!stop\_\-left@{stop\_\-left}}
+\index{stop\_\-left@{stop\_\-left}!RemoteControl@{RemoteControl}}
+\subsubsection[{stop\_\-left}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::stop\_\-left (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a02e86cc3fface3d3ea33d62a7df30acb}
+send the signal to the server to tell the vehicle to stop turning left \hypertarget{classRemoteControl_a148de9c23fb47748ebfd00f7b282974c}{
+\index{RemoteControl@{RemoteControl}!stop\_\-reverse@{stop\_\-reverse}}
+\index{stop\_\-reverse@{stop\_\-reverse}!RemoteControl@{RemoteControl}}
+\subsubsection[{stop\_\-reverse}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::stop\_\-reverse (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a148de9c23fb47748ebfd00f7b282974c}
+sends the signal to the server to tell the vehicle to start moving backward \hypertarget{classRemoteControl_af7e0d46e7824d3e6483b55d887f23063}{
+\index{RemoteControl@{RemoteControl}!stop\_\-right@{stop\_\-right}}
+\index{stop\_\-right@{stop\_\-right}!RemoteControl@{RemoteControl}}
+\subsubsection[{stop\_\-right}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::stop\_\-right (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_af7e0d46e7824d3e6483b55d887f23063}
+send the signal to the server to tell the vehicle to stop turning right \hypertarget{classRemoteControl_a036332c3c4e0050dda3b0d10db16e110}{
+\index{RemoteControl@{RemoteControl}!stop\_\-turret\_\-down@{stop\_\-turret\_\-down}}
+\index{stop\_\-turret\_\-down@{stop\_\-turret\_\-down}!RemoteControl@{RemoteControl}}
+\subsubsection[{stop\_\-turret\_\-down}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::stop\_\-turret\_\-down (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a036332c3c4e0050dda3b0d10db16e110}
+send signal to server to tell the turret to stop going down \hypertarget{classRemoteControl_afeb9cfe8a1c8e3dc1a89c039378417a4}{
+\index{RemoteControl@{RemoteControl}!stop\_\-turret\_\-left@{stop\_\-turret\_\-left}}
+\index{stop\_\-turret\_\-left@{stop\_\-turret\_\-left}!RemoteControl@{RemoteControl}}
+\subsubsection[{stop\_\-turret\_\-left}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::stop\_\-turret\_\-left (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_afeb9cfe8a1c8e3dc1a89c039378417a4}
+send signal to server to tell the turret to stop left \hypertarget{classRemoteControl_a856d98499b4b6b4d9374b6bd43f9bc0b}{
+\index{RemoteControl@{RemoteControl}!stop\_\-turret\_\-right@{stop\_\-turret\_\-right}}
+\index{stop\_\-turret\_\-right@{stop\_\-turret\_\-right}!RemoteControl@{RemoteControl}}
+\subsubsection[{stop\_\-turret\_\-right}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::stop\_\-turret\_\-right (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a856d98499b4b6b4d9374b6bd43f9bc0b}
+send signal to server to tell the turret to stop right \hypertarget{classRemoteControl_a79edbfa1fa9b764ed15d659c7589b4bb}{
+\index{RemoteControl@{RemoteControl}!stop\_\-turret\_\-up@{stop\_\-turret\_\-up}}
+\index{stop\_\-turret\_\-up@{stop\_\-turret\_\-up}!RemoteControl@{RemoteControl}}
+\subsubsection[{stop\_\-turret\_\-up}]{\setlength{\rightskip}{0pt plus 5cm}void RemoteControl::stop\_\-turret\_\-up (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classRemoteControl_a79edbfa1fa9b764ed15d659c7589b4bb}
+send signal to server to tell the turret to stop going up 
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+remotecontrol.h\item 
+remotecontrol.cpp\end{DoxyCompactItemize}

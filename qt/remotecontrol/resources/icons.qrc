@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="vehicleIcons">
+    <file>down.png</file>
+    <file>up.png</file>
+    <file>right.png</file>
+    <file>left.png</file>
+    <file>left_turret.png</file>
+    <file>right_turret.png</file>
+    <file>up_turret.png</file>
+    <file>down_turret.png</file>
+  </qresource>
+</RCC>
