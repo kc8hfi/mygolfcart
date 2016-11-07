@@ -1,5 +1,5 @@
 /*
- * Copyright 2010
+ * Copyright 2010-2013
  * Richie Adams, Charles Amey, Donald Kinder, Chance Sheets
  * 
 This file is part of Remote Control.
@@ -18,14 +18,20 @@ You should have received a copy of the GNU General Public License
 along with Remote Control.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QApplication>
-#include "remotecontrol.h"
+#ifndef ABOUT_H
+#define ABOUT_H
 
-int main (int argc, char* argv[])
+#include <QDialog>
+#include "ui_about.h"
+
+class About :public QDialog, private Ui_About_Base
 {
-     QApplication app(argc,argv);
-     RemoteControl remote;
-     remote.setWindowTitle("Remote Control");
-     remote.show();
-     return app.exec();
-}
+     public:
+          About();
+          ~About();
+     private:
+          Ui_About_Base aboutBase;
+};
+
+
+#endif //ABOUT_H

@@ -18,14 +18,39 @@ You should have received a copy of the GNU General Public License
 along with Remote Control.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QApplication>
-#include "remotecontrol.h"
+#include <QDialog>
+#include <QString>
+#include <QDebug>
 
-int main (int argc, char* argv[])
+#include "connectioninfo.h"
+
+ConnectionInfo::ConnectionInfo()
 {
-     QApplication app(argc,argv);
-     RemoteControl remote;
-     remote.setWindowTitle("Remote Control");
-     remote.show();
-     return app.exec();
+	connectInfo.setupUi(this);
+	ip = "";
+	port = "";
+	
+	connectInfo.ipLabel->setText("ip address");
+	connectInfo.portLabel->setText("port number");
+	
+	connectInfo.ipText->setText("localhost");
+	connectInfo.portText->setText("4201");
+}
+//connectInfo;
+
+void ConnectionInfo::okClicked()
+{
+	ip = connectInfo.ipText->text();
+	port = connectInfo.portText->text();
+	emit accept();
+}
+
+QString ConnectionInfo::getIp()
+{
+	return ip;
+}
+
+QString ConnectionInfo::getPort()
+{
+	return port;
 }

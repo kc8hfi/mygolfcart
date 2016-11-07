@@ -60,6 +60,8 @@ class RemoteControl : public QMainWindow, private Ui_RemoteControlBase
           */
           void displayError(QAbstractSocket::SocketError);
           
+          void getthestuff();
+          
           /*!
                * if the connection was successful, do this
                */

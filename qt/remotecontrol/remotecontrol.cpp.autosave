@@ -76,7 +76,7 @@ RemoteControl::RemoteControl(QMainWindow *parent)
      //connect(socket, SIGNAL(readyRead()), this, SLOT(readFortune()));
      connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
                this, SLOT(displayError(QAbstractSocket::SocketError)));
-
+click
      connect(socket, SIGNAL(connected()),this,SLOT(connectionSuccess()));
      
      connect(socket, SIGNAL(readyRead()), this, SLOT(getthestuff()));

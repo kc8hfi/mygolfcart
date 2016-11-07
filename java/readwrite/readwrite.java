@@ -3,6 +3,9 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 
 /*
  * to compile:
@@ -13,7 +16,7 @@ import java.io.OutputStreamWriter;
  * for example, -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM0:/dev/ttyS8:/dev/<your serial port name here>
  * 
  * to run:
- * java -cp /usr/share/java/RXTXcomm.jar:. -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM0    ArduinoReadWrite
+ * java -cp /usr/share/java/RXTXcomm.jar:. -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM0    readwrite
  * 
  * You'll need the RXTX library installed, and then specify
  * the path to the RXTXcomm.jar file.  Depending your linux distro, 
@@ -34,6 +37,12 @@ public class readwrite
           
           String port = "/dev/ttyACM0";
           String consoleReaderName = "Reader";
+          
+
+          int portNumber = 4201;
+          boolean listening = true;
+
+          
           try 
           {
                ArduinoReadWrite arduino = new ArduinoReadWrite(thestatus);
@@ -44,10 +53,16 @@ public class readwrite
                
                ConsoleReadingThread consoleReader1 = new ConsoleReadingThread(mywriter,reader,consoleReaderName);
                consoleReader1.start();
-               System.out.println("port: " + port + " ready");
+               System.out.println("arduino port: " + port + " ready");
                
                //start the event timer
-               mytimer t = new mytimer(mywriter,reader,1); //how many seconds
+               //mytimer t = new mytimer(mywriter,reader,1); //how many seconds
+
+               ServerSocket serverSocket = new ServerSocket(portNumber);
+               while (listening)
+               {
+                    new KKMultiServerThread(serverSocket.accept(),mywriter, thestatus).start();
+               }
                
           }
           catch ( Exception e )

@@ -49,4 +49,3 @@ public class ArduinoReadWrite
      private OutputStream outputStream;
      private GolfCartStatus status;
 }
-
