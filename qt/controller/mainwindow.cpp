@@ -226,10 +226,12 @@ void MainWindow::buttonPress(int button)
           case 0:
                //qInfo()<<"go forward";
                startForward();
+               ui->goButton->setDown(true);
           break;
           case 1:
                //qInfo()<<"start the brakes";
                startBrakes();
+               ui->brakeButton->setDown(true);
           break;
      }
 }
@@ -241,10 +243,12 @@ void MainWindow::buttonRelease(int button)
           case 0:
                //qInfo()<<"stop forward";
                stopForward();
+               ui->goButton->setDown(false);
           break;
           case 1:
                //qInfo()<<"stop the brakes";
                stopBrakes();
+               ui->brakeButton->setDown(false);
           break;
      }
 }
@@ -256,12 +260,14 @@ void MainWindow::axisEvent(int axis, int value)
      {
           //qDebug()<<"left";
           goLeft();
+          ui->leftButton->setDown(true);
           startleft = 1;
      }
      if (axis == 0 && value == 32767)
      {
           //qDebug()<<"right";
           goRight();
+          ui->rightButton->setDown(true);
           startright = 1;
      }
      if (axis == 0 && value == 0)
@@ -270,12 +276,14 @@ void MainWindow::axisEvent(int axis, int value)
           {
                //qDebug()<<"stop left";
                stopLeft();
+               ui->leftButton->setDown(false);
                startleft = 0;
           }
           if(startright == 1)
           {
                stopRight();
                startright = 0;
+               ui->rightButton->setDown(false);
           }
      }
 }
@@ -316,6 +324,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
                     ui->leftButton->setDown(true);
                     goLeft();
                break;
+               case Qt::Key_D:
+                    ui->rightButton->setDown(true);
+                    goRight();
+               break;
+               case Qt::Key_J:
+                    ui->goButton->setDown(true);
+                    startForward();
+               break;
+               case Qt::Key_L:
+                    ui->brakeButton->setDown(true);
+                    startBrakes();
                default:
                     //don't care about any of the other keys
                     QWidget::keyPressEvent(event);
@@ -333,6 +352,17 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
                     ui->leftButton->setDown(false);
                     stopLeft();
                break;
+               case Qt::Key_D:
+                    ui->rightButton->setDown(false);
+                    stopRight();
+               break;
+               case Qt::Key_J:
+                    ui->goButton->setDown(false);
+                    stopForward();
+               break;
+               case Qt::Key_L:
+                    ui->brakeButton->setDown(false);
+                    stopBrakes();               
                default:
                     QWidget::keyPressEvent(event);
           }
