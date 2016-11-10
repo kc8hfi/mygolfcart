@@ -33,7 +33,7 @@ ConnectionInfo::ConnectionInfo()
 	connectInfo.ipLabel->setText("ip address");
 	connectInfo.portLabel->setText("port number");
 	
-	connectInfo.ipText->setText("localhost");
+        connectInfo.ipText->setText("golfcart");
 	connectInfo.portText->setText("4201");
 }
 //connectInfo;

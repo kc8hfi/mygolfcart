@@ -53,11 +53,15 @@ public slots:
      void goButtonPressed();
      void stopButtonPressed();
      
+     void leftButtonReleased();
+     void rightButtonReleased();
+     void goButtonReleased();
+     void stopButtonReleased();
+     
      void buttonPress(int button);
      void buttonRelease(int button);
      void axisEvent(int axis, int value);
      
-
 private:
     Ui::MainWindow *ui;
     QTcpSocket *socket;

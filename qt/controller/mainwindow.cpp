@@ -83,10 +83,16 @@ MainWindow::MainWindow(QWidget *parent) :
 //     this->addAction(test);
     
     //connect the buttons
-    connect(ui->leftButton,SIGNAL(clicked()), this, SLOT(leftButtonPressed()));
+    connect(ui->leftButton,SIGNAL(pressed()), this, SLOT(leftButtonPressed()));
     connect(ui->rightButton,SIGNAL(pressed()), this, SLOT(rightButtonPressed()));
     connect(ui->goButton,SIGNAL(pressed()), this, SLOT(goButtonPressed()));
     connect(ui->brakeButton,SIGNAL(pressed()), this, SLOT(stopButtonPressed()));
+    
+    connect(ui->leftButton,SIGNAL(released()), this, SLOT(leftButtonReleased()));
+    connect(ui->rightButton,SIGNAL(released()), this, SLOT(rightButtonReleased()));
+    connect(ui->goButton,SIGNAL(released()), this, SLOT(goButtonReleased()));
+    connect(ui->brakeButton,SIGNAL(released()), this, SLOT(stopButtonReleased()));
+    
 }
 
 MainWindow::~MainWindow()
@@ -311,6 +317,26 @@ void MainWindow::stopButtonPressed()
 {
      //qInfo()<<"stop";
      startBrakes();
+}
+
+void MainWindow::leftButtonReleased()
+{
+     stopLeft();
+}
+
+void MainWindow::rightButtonReleased()
+{
+     stopRight();
+}
+
+void MainWindow::goButtonReleased()
+{
+     stopForward();
+}
+
+void MainWindow::stopButtonReleased()
+{
+     stopBrakes();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
