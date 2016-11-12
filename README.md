@@ -21,7 +21,10 @@ arduino - contains all the code that runs on the arduino
      
 docs - documentation
 
-java - 
+java -
+     server - New server code to interface between the client and the arduino. 
+
+legacy java - 
      arduinoreadwrite - 
      filechange - 
      GPSRead - 
