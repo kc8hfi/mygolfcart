@@ -13,24 +13,24 @@ This is the primary control software for the WVUIT golfCart Project.
 	
 ----------
 
-Requirements 
-:	Perl
-		>perl-Future
-		>perl-IO-Termios
-		>perl-IO-Async
-		>perl-Moose
-		>perl-Text-CSV
-		>perl-Data-Dumper
-:	Arduino
-		>Arduino v1.6.7
-:	QT
-		>QSerialPort
+###Requirements 
 
+- Perl
+	- perl-Future
+	- perl-IO-Termios
+	- perl-IO-Async
+	- perl-Moose
+	- perl-Text-CSV
+	- perl-Data-Dumper
+- Arduino
+	- Arduino IDE v 1.6.7
+- QT
+	- QSerialPort
 
 Documentation
 ----  
 
-###Dev 
+###Dev Folder
 | Category	| Component	| Description						|
 | --------------| --------------| ----------------------------------------------------- |
 |golfCart	|		| 							|
@@ -48,7 +48,7 @@ Documentation
 |		| jssc-2.8.0 	| JSSC serial port library for serial communication. 	|
 
 
-###Current
+###Current Folder
 | Category	| Component	| Description						|
 | --------------| --------------| ----------------------------------------------------- |
 |arduino	|		| 							|
