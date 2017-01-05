@@ -6,10 +6,9 @@ This is the primary control software for the WVUIT golfCart Project.
 
 ----------
 ###Change Log
-- Restructured the repository
-- Separated new code from working code
 - Dev 
-	- refactored brake code ( currently untested )
+	- Added subModule code for throttle and steering ( currently Untested)
+	- Began work on primary movement code for golfCart
 	
 ----------
 
@@ -25,9 +24,9 @@ This is the primary control software for the WVUIT golfCart Project.
 - Arduino
 	- Arduino IDE v 1.6.7
 - QT
-	- QSerialPort
+	- QSerialPort (Not required but hightly reccomended)
 
-Documentation
+Basic Documentation
 ----  
 
 ###Dev Folder
@@ -37,6 +36,9 @@ Documentation
 |		| golfCart	| main program for the golfCart 			|
 |testModules	| 		| 							|
 |           	| brake 	| Tests the Brake system sub-component.			|
+|           	| move 		| Tests the primary movements of golfCart		|
+|           	| steering 	| Tests the steering system sub-component.		|
+|           	| throttle 	| Tests the throttle system sub-component.		|
 |java		|		|							|
 |		| server	| Main java application for the server			|
 |		| sharedData 	| Common data object					|
