@@ -2,6 +2,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class debugLogger 
 {
@@ -25,11 +27,11 @@ public class debugLogger
     		
     		//Create output stream for the buffered reader and create the buffered reader
     		fileOutputStream = new FileWriter(logFile.getAbsoluteFile());
-			writer= new BufferedWriter(fileOutputStream);
+                writer= new BufferedWriter(fileOutputStream);
     	}
     	catch(IOException e)
     	{
-    		System.out.println("FAILURE: Unable to create log file");
+    		System.out.println("ERROR: Unable to create log file");
     	}
     	
     }
@@ -46,15 +48,22 @@ public class debugLogger
     	{
     		try
     		{
+                        //Append time-stamp to the output
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+                        Date resultDate = new Date(System.currentTimeMillis());
+                        temp = sdf.format(resultDate)+"\t"+temp;
+                        
     			//Print to console
         		System.out.println(temp);
+        		
         		//Write to file;
+        		temp = temp+"\n";
         		writer.append(temp);
         		writer.flush();
     		}
     		catch(IOException e)
     		{
-    			System.out.println("CRITICAL: Unable to write to log file!");
+    			System.out.println("ERROR: Unable to write to log file!");
     		}
     	}
     }
@@ -68,7 +77,7 @@ public class debugLogger
     	}
     	catch(IOException e)
     	{
-    		System.out.println("CRITICAL: Cant save log file!");
+    		System.out.println("ERROR: Cant save log file!");
     	}
     }
 }

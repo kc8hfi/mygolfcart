@@ -31,16 +31,18 @@ public class server
 	
     public static void main(String[] args)
     {	
-    	//List my ports
+    	//Create server object
         server myserver = new server();
-        myserver.myLogger.writeLog("Server has stopped");
+        
+        //Tidy the logs
         myserver.myLogger.close();
     }    
     
     
     public server()
     {
-    	while(true)
+	boolean serverLoop = true;
+    	while(serverLoop)
     	{
     		myLogger = new debugLogger(2);
     		myLogger.writeLog("Initialize the server!");
@@ -68,9 +70,20 @@ public class server
     		ardReadThread.start();
     		netReadThread.start();
     	
-    		while(ardReadThread.isAlive() && netReadThread.isAlive());
+    		//while(ardReadThread.isAlive() && netReadThread.isAlive());
+    		try
+    		{
+			ardReadThread.join();
+			netReadThread.join();
+		}
+		catch(InterruptedException e)
+		{
+			myLogger.writeLog("CRITICAL ERROR: Unable to Join threads properly!");
+			myLogger.writeLog("SERVER TERMINATED!");
+			serverLoop=false;
+		}
     		
-    		myLogger.writeLog("Oops. Attemp reconnection");
+    		myLogger.writeLog("Oops Conenction Lost. Attempting reset...");
 
     		closeAll();
     		
@@ -87,7 +100,7 @@ public class server
     	}
     	catch(Exception e)
     	{
-    		myLogger.writeLog("ERROR CLOSING PORTS AND SOCKETS!");
+    		myLogger.writeLog("ERROR: Unable to close socket or serial port!");
     	}
     	
     	myLogger.close();
@@ -100,11 +113,14 @@ public class server
     		myListener = new ServerSocket(networkPort);
     		myLogger.writeLog("Waiting for client to connect!");
     		netSocket = myListener.accept();
+    		
+    		//Set timout of network socket
+    		netSocket.setSoTimeout(1500);
     		myLogger.writeLog("Client Connected!");
     	}
     	catch(IOException e)
     	{
-            myLogger.writeLog("Error: Failure to create network Socket!");
+            myLogger.writeLog("ERROR: Failure to create network Socket!");
             myLogger.writeLog("\n\n");
             e.printStackTrace();
             myLogger.writeLog("\n\n");
@@ -123,7 +139,7 @@ public class server
     	}
     	catch (SerialPortException e)
     	{
-            myLogger.writeLog("Error: Failure to create to serial port!");
+            myLogger.writeLog("ERROR: Failure to create to serial port!");
             myLogger.writeLog("\n\n");
             e.printStackTrace();
             myLogger.writeLog("\n\n");

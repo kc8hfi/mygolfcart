@@ -18,7 +18,7 @@ public class networkWrite
 		} 
     	catch (IOException e) 
     	{
-            myLogger.writeLog("CRITICAL: Failure to write to network socket!");
+            myLogger.writeLog("ERROR: Failure to write to network socket!");
             myLogger.writeLog("\n\n");
             e.printStackTrace();
             myLogger.writeLog("\n\n");

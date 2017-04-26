@@ -426,6 +426,7 @@ void MainWindow::stopRight()
 
 void MainWindow::startForward()
 {
+    stopBrakes();
      QTextStream out(socket);
      out << START_VEHICLE_FORWARD;
      out << "\n";
