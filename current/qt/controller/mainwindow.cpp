@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
      timer = new QTimer(this);
      connect(timer, SIGNAL(timeout()), this, SLOT(heartBeat()));
      
-     timerDelay = 3000; //in milliseconds,  1000ms = 1s
+     timerDelay = 1000; //in milliseconds,  1000ms = 1s
      
 
      joystick = new Joystick();
